@@ -1,0 +1,1658 @@
+{
+  "method": {
+    "architecture": {
+      "seq_len": 9,
+      "vocab_size": 12,
+      "d_model": 32,
+      "n_heads": 4,
+      "n_layers": 2,
+      "d_ff": 64,
+      "dropout": 0.0
+    },
+    "steps": 1200,
+    "eval_sequences": 2048,
+    "seeds": [
+      11,
+      29,
+      47
+    ],
+    "probe_split": "25% held-out sequences",
+    "device": "cuda"
+  },
+  "runs": [
+    {
+      "task": "copy",
+      "seed": 11,
+      "baseline": {
+        "token": 1.0,
+        "exact": 1.0
+      },
+      "layers": [
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.6501572327044025,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.32625786163522014,
+              "majority": 0.21696357351768147
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.5471698113207547,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.3290094339622642,
+              "majority": 0.21696357351768147
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9985977229373083,
+              "median_eta2": 0.9935671645130484,
+              "neurons_eta2_gt_0.2": 64
+            },
+            "position": {
+              "max_eta2": 0.0019189910586454343,
+              "median_eta2": 0.0006300125311909843,
+              "neurons_eta2_gt_0.2": 0
+            },
+            "length": {
+              "max_eta2": 0.0017892905154227943,
+              "median_eta2": 0.000532004072409979,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_sd": {
+              "token": 0.0,
+              "exact": 0.0
+            }
+          }
+        },
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.45558176100628933,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.32272012578616355,
+              "majority": 0.21696357351768147
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.36988993710691825,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.3388364779874214,
+              "majority": 0.21696357351768147
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9991903380459343,
+              "median_eta2": 0.995281906093171,
+              "neurons_eta2_gt_0.2": 64
+            },
+            "position": {
+              "max_eta2": 0.001506548844388827,
+              "median_eta2": 0.0006207990630881218,
+              "neurons_eta2_gt_0.2": 0
+            },
+            "length": {
+              "max_eta2": 0.002627150333444553,
+              "median_eta2": 0.0006950105608234716,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_sd": {
+              "token": 0.0,
+              "exact": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "task": "copy",
+      "seed": 29,
+      "baseline": {
+        "token": 1.0,
+        "exact": 1.0
+      },
+      "layers": [
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.6682520808561236,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.34244946492271106,
+              "majority": 0.21105660877634894
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.5616329766151407,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.35354736424891003,
+              "majority": 0.21105660877634894
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9992004869096347,
+              "median_eta2": 0.994850702213183,
+              "neurons_eta2_gt_0.2": 64
+            },
+            "position": {
+              "max_eta2": 0.0020113089117619466,
+              "median_eta2": 0.0007449931788945899,
+              "neurons_eta2_gt_0.2": 0
+            },
+            "length": {
+              "max_eta2": 0.004757039638536524,
+              "median_eta2": 0.0006426212821647975,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_sd": {
+              "token": 0.0,
+              "exact": 0.0
+            }
+          }
+        },
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.45739199365834327,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.28180737217598095,
+              "majority": 0.21105660877634894
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.3686087990487515,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.3028141101862862,
+              "majority": 0.21105660877634894
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9987009961265504,
+              "median_eta2": 0.9939643711284805,
+              "neurons_eta2_gt_0.2": 64
+            },
+            "position": {
+              "max_eta2": 0.002085802106270454,
+              "median_eta2": 0.0006815697326009823,
+              "neurons_eta2_gt_0.2": 0
+            },
+            "length": {
+              "max_eta2": 0.0020665111519181413,
+              "median_eta2": 0.0005179090379869575,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_sd": {
+              "token": 0.0,
+              "exact": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "task": "copy",
+      "seed": 47,
+      "baseline": {
+        "token": 1.0,
+        "exact": 1.0
+      },
+      "layers": [
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.5979938271604939,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.3055555555555556,
+              "majority": 0.21193470698421193
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.5389660493827161,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.3097993827160494,
+              "majority": 0.21193470698421193
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9993394727334292,
+              "median_eta2": 0.9954786785959004,
+              "neurons_eta2_gt_0.2": 64
+            },
+            "position": {
+              "max_eta2": 0.00169112035754978,
+              "median_eta2": 0.0006312787288208404,
+              "neurons_eta2_gt_0.2": 0
+            },
+            "length": {
+              "max_eta2": 0.0022187298469838546,
+              "median_eta2": 0.0005826401236800768,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_sd": {
+              "token": 0.0,
+              "exact": 0.0
+            }
+          }
+        },
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.4077932098765432,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.3136574074074074,
+              "majority": 0.21193470698421193
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.4255401234567901,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.3113425925925926,
+              "majority": 0.21193470698421193
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9989054639107575,
+              "median_eta2": 0.9946754705978311,
+              "neurons_eta2_gt_0.2": 64
+            },
+            "position": {
+              "max_eta2": 0.0020666842111459554,
+              "median_eta2": 0.0006560757033315728,
+              "neurons_eta2_gt_0.2": 0
+            },
+            "length": {
+              "max_eta2": 0.00241755002899641,
+              "median_eta2": 0.0006715091084790457,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_sd": {
+              "token": 0.0,
+              "exact": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "task": "reverse",
+      "seed": 11,
+      "baseline": {
+        "token": 1.0,
+        "exact": 1.0
+      },
+      "layers": [
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.9874213836477987,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.8140723270440252,
+              "majority": 0.21696357351768147
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.9846698113207547,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.7586477987421384,
+              "majority": 0.21696357351768147
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9835137988899524,
+              "median_eta2": 0.6533808732441942,
+              "neurons_eta2_gt_0.2": 54
+            },
+            "position": {
+              "max_eta2": 0.8951533063387238,
+              "median_eta2": 0.13744721949247102,
+              "neurons_eta2_gt_0.2": 26
+            },
+            "length": {
+              "max_eta2": 0.17559680212686019,
+              "median_eta2": 0.02624927750337923,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 0.9995872378349304,
+              "exact": 0.99755859375
+            },
+            "random_mean": {
+              "token": 0.986981999874115,
+              "exact": 0.92900390625
+            },
+            "random_sd": {
+              "token": 0.016374363173681388,
+              "exact": 0.09003771203739144
+            }
+          }
+        },
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.8691037735849056,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.6560534591194969,
+              "majority": 0.21696357351768147
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 0.9984276729559748,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.7999213836477987,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.5577830188679245,
+              "majority": 0.21696357351768147
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.44600753459021397,
+              "median_eta2": 0.06622529421288961,
+              "neurons_eta2_gt_0.2": 3
+            },
+            "position": {
+              "max_eta2": 0.3927244197606505,
+              "median_eta2": 0.08869972612994134,
+              "neurons_eta2_gt_0.2": 14
+            },
+            "length": {
+              "max_eta2": 0.14182108652839712,
+              "median_eta2": 0.014500307822551888,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_sd": {
+              "token": 0.0,
+              "exact": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "task": "reverse",
+      "seed": 29,
+      "baseline": {
+        "token": 1.0,
+        "exact": 1.0
+      },
+      "layers": [
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.9853349187475228,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.6702338485929449,
+              "majority": 0.21105660877634894
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.985731272294887,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.6872770511296076,
+              "majority": 0.21105660877634894
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9308295968117416,
+              "median_eta2": 0.4984709245413552,
+              "neurons_eta2_gt_0.2": 48
+            },
+            "position": {
+              "max_eta2": 0.7560459765531012,
+              "median_eta2": 0.2264762464886118,
+              "neurons_eta2_gt_0.2": 35
+            },
+            "length": {
+              "max_eta2": 0.19323266558721192,
+              "median_eta2": 0.05312594468265181,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 0.9999174475669861,
+              "exact": 0.99951171875
+            },
+            "random_mean": {
+              "token": 0.9791893661022186,
+              "exact": 0.909814453125
+            },
+            "random_sd": {
+              "token": 0.03805764831660816,
+              "exact": 0.14949184013986214
+            }
+          }
+        },
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.9056678557273088,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.56995640110979,
+              "majority": 0.21105660877634894
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.713436385255648,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.4518430439952438,
+              "majority": 0.21105660877634894
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.4267043776044847,
+              "median_eta2": 0.10129813921701712,
+              "neurons_eta2_gt_0.2": 10
+            },
+            "position": {
+              "max_eta2": 0.19736140467094113,
+              "median_eta2": 0.04204013192006478,
+              "neurons_eta2_gt_0.2": 0
+            },
+            "length": {
+              "max_eta2": 0.044227216090170315,
+              "median_eta2": 0.004993774038609003,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_sd": {
+              "token": 0.0,
+              "exact": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "task": "reverse",
+      "seed": 47,
+      "baseline": {
+        "token": 1.0,
+        "exact": 1.0
+      },
+      "layers": [
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.9903549382716049,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.6404320987654321,
+              "majority": 0.21193470698421193
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.9880401234567902,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.7415123456790124,
+              "majority": 0.21193470698421193
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9751411171420524,
+              "median_eta2": 0.4411907780932548,
+              "neurons_eta2_gt_0.2": 44
+            },
+            "position": {
+              "max_eta2": 0.5290161406229654,
+              "median_eta2": 0.1717876804433796,
+              "neurons_eta2_gt_0.2": 27
+            },
+            "length": {
+              "max_eta2": 0.34195314125857074,
+              "median_eta2": 0.07847735544374579,
+              "neurons_eta2_gt_0.2": 9
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 0.9997523427009583,
+              "exact": 0.99853515625
+            },
+            "random_mean": {
+              "token": 0.9977711766958237,
+              "exact": 0.987353515625
+            },
+            "random_sd": {
+              "token": 0.003160888236337932,
+              "exact": 0.017868625491263213
+            }
+          }
+        },
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 0.9918981481481481,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.9197530864197531,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.45949074074074076,
+              "majority": 0.21193470698421193
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.7600308641975309,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.4054783950617284,
+              "majority": 0.21193470698421193
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.8221972053366945,
+              "median_eta2": 0.2592044817873379,
+              "neurons_eta2_gt_0.2": 39
+            },
+            "position": {
+              "max_eta2": 0.14590359745799514,
+              "median_eta2": 0.028333552828424778,
+              "neurons_eta2_gt_0.2": 0
+            },
+            "length": {
+              "max_eta2": 0.09702443329450258,
+              "median_eta2": 0.007523131916645299,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_sd": {
+              "token": 0.0,
+              "exact": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "task": "sort",
+      "seed": 11,
+      "baseline": {
+        "token": 1.0,
+        "exact": 1.0
+      },
+      "layers": [
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.8926886792452831,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.4744496855345912,
+              "majority": 0.21696357351768147
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.7205188679245284,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.3977987421383648,
+              "majority": 0.21696357351768147
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9849299537559864,
+              "median_eta2": 0.8441752726346019,
+              "neurons_eta2_gt_0.2": 59
+            },
+            "position": {
+              "max_eta2": 0.478062079245525,
+              "median_eta2": 0.02714001592093781,
+              "neurons_eta2_gt_0.2": 13
+            },
+            "length": {
+              "max_eta2": 0.028525959404203355,
+              "median_eta2": 0.002507798626831482,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 0.9951295852661133,
+              "exact": 0.97119140625
+            },
+            "random_mean": {
+              "token": 0.993866604566574,
+              "exact": 0.9666748046875
+            },
+            "random_sd": {
+              "token": 0.010710027567396124,
+              "exact": 0.05570043078483679
+            }
+          }
+        },
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 0.9964622641509434,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.5577830188679245,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.33608490566037735,
+              "majority": 0.21696357351768147
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.47091194968553457,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.33176100628930816,
+              "majority": 0.21696357351768147
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.8124262193454598,
+              "median_eta2": 0.07684000465629195,
+              "neurons_eta2_gt_0.2": 20
+            },
+            "position": {
+              "max_eta2": 0.44768853146372395,
+              "median_eta2": 0.12151056218820463,
+              "neurons_eta2_gt_0.2": 18
+            },
+            "length": {
+              "max_eta2": 0.05290979367243645,
+              "median_eta2": 0.0022976931727277787,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 0.9995790004730225,
+              "exact": 0.997509765625
+            },
+            "random_sd": {
+              "token": 0.0013028342832150852,
+              "exact": 0.007706340497824386
+            }
+          }
+        }
+      ]
+    },
+    {
+      "task": "sort",
+      "seed": 29,
+      "baseline": {
+        "token": 1.0,
+        "exact": 1.0
+      },
+      "layers": [
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.8826793499801823,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.4383670233848593,
+              "majority": 0.21105660877634894
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.7590170432025367,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.39595719381688466,
+              "majority": 0.21105660877634894
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9809564565240864,
+              "median_eta2": 0.7522164438732838,
+              "neurons_eta2_gt_0.2": 61
+            },
+            "position": {
+              "max_eta2": 0.43685617286735146,
+              "median_eta2": 0.061006104014887104,
+              "neurons_eta2_gt_0.2": 17
+            },
+            "length": {
+              "max_eta2": 0.040276466959487195,
+              "median_eta2": 0.0029626717366699755,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 0.9986792206764221,
+              "exact": 0.9921875
+            },
+            "random_mean": {
+              "token": 0.9871966302394867,
+              "exact": 0.9344482421875
+            },
+            "random_sd": {
+              "token": 0.02476499864072234,
+              "exact": 0.11760848404308794
+            }
+          }
+        },
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 0.9972255251684503,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.5402298850574713,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.3226317875544986,
+              "majority": 0.21105660877634894
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 0.9992072929052715,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.4562029330162505,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.3032104637336504,
+              "majority": 0.21105660877634894
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.8260109525648642,
+              "median_eta2": 0.17034033330576917,
+              "neurons_eta2_gt_0.2": 28
+            },
+            "position": {
+              "max_eta2": 0.3888045209905409,
+              "median_eta2": 0.125566255009503,
+              "neurons_eta2_gt_0.2": 24
+            },
+            "length": {
+              "max_eta2": 0.014826230122488073,
+              "median_eta2": 0.0016265927781904555,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 0.9999339580535889,
+              "exact": 0.999609375
+            },
+            "random_sd": {
+              "token": 0.00010951817833524295,
+              "exact": 0.0006477782793662891
+            }
+          }
+        }
+      ]
+    },
+    {
+      "task": "sort",
+      "seed": 47,
+      "baseline": {
+        "token": 1.0,
+        "exact": 1.0
+      },
+      "layers": [
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.8630401234567902,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.44328703703703703,
+              "majority": 0.21193470698421193
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.7191358024691358,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.39621913580246915,
+              "majority": 0.21193470698421193
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.975163865083136,
+              "median_eta2": 0.8588416601928883,
+              "neurons_eta2_gt_0.2": 60
+            },
+            "position": {
+              "max_eta2": 0.48530932417240447,
+              "median_eta2": 0.026714831756730173,
+              "neurons_eta2_gt_0.2": 6
+            },
+            "length": {
+              "max_eta2": 0.1613826240630096,
+              "median_eta2": 0.003985803458246758,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 0.98844313621521,
+              "exact": 0.9345703125
+            },
+            "random_mean": {
+              "token": 0.9937716752290726,
+              "exact": 0.964306640625
+            },
+            "random_sd": {
+              "token": 0.008185879188112113,
+              "exact": 0.04535812185923721
+            }
+          }
+        },
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 0.9849537037037037,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.5428240740740741,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.3175154320987654,
+              "majority": 0.21193470698421193
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 0.9996141975308642,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.47260802469135804,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.30632716049382713,
+              "majority": 0.21193470698421193
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.6822249379155747,
+              "median_eta2": 0.13801053269364705,
+              "neurons_eta2_gt_0.2": 28
+            },
+            "position": {
+              "max_eta2": 0.35763101543830345,
+              "median_eta2": 0.11283119112694187,
+              "neurons_eta2_gt_0.2": 13
+            },
+            "length": {
+              "max_eta2": 0.051373001394762655,
+              "median_eta2": 0.002174641234390996,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 0.9979403972625732,
+              "exact": 0.98798828125
+            },
+            "random_sd": {
+              "token": 0.005326720691041405,
+              "exact": 0.030798666427277827
+            }
+          }
+        }
+      ]
+    },
+    {
+      "task": "rotate_left",
+      "seed": 11,
+      "baseline": {
+        "token": 1.0,
+        "exact": 1.0
+      },
+      "layers": [
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.970125786163522,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.7492138364779874,
+              "majority": 0.21696357351768147
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.9681603773584906,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.6835691823899371,
+              "majority": 0.21696357351768147
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9868914991773945,
+              "median_eta2": 0.776836718517188,
+              "neurons_eta2_gt_0.2": 63
+            },
+            "position": {
+              "max_eta2": 0.7237866069614971,
+              "median_eta2": 0.10619959249163169,
+              "neurons_eta2_gt_0.2": 21
+            },
+            "length": {
+              "max_eta2": 0.13115462930793104,
+              "median_eta2": 0.007217400804250428,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 0.9960376620292664,
+              "exact": 0.9765625
+            },
+            "random_mean": {
+              "token": 0.9733820408582687,
+              "exact": 0.8818359375
+            },
+            "random_sd": {
+              "token": 0.04219034153428535,
+              "exact": 0.17173046623989915
+            }
+          }
+        },
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 0.9996069182389937,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.9009433962264151,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.4406446540880503,
+              "majority": 0.21696357351768147
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10635469290082425
+            },
+            "position": {
+              "accuracy": 0.7952044025157232,
+              "majority": 0.20420101036958255
+            },
+            "length": {
+              "accuracy": 0.3757861635220126,
+              "majority": 0.21696357351768147
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.5157896411677323,
+              "median_eta2": 0.0938583847973943,
+              "neurons_eta2_gt_0.2": 10
+            },
+            "position": {
+              "max_eta2": 0.28230687944188676,
+              "median_eta2": 0.032493892320631115,
+              "neurons_eta2_gt_0.2": 3
+            },
+            "length": {
+              "max_eta2": 0.03004204725115637,
+              "median_eta2": 0.003825034590075697,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_sd": {
+              "token": 0.0,
+              "exact": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "task": "rotate_left",
+      "seed": 29,
+      "baseline": {
+        "token": 1.0,
+        "exact": 1.0
+      },
+      "layers": [
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.9916765755053508,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.6698374950455807,
+              "majority": 0.21105660877634894
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.9912802219579865,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.6357510899722553,
+              "majority": 0.21105660877634894
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9825738390673838,
+              "median_eta2": 0.7084617011043446,
+              "neurons_eta2_gt_0.2": 62
+            },
+            "position": {
+              "max_eta2": 0.7763397189670529,
+              "median_eta2": 0.19179820240871745,
+              "neurons_eta2_gt_0.2": 31
+            },
+            "length": {
+              "max_eta2": 0.09209606981904014,
+              "median_eta2": 0.007377779105380039,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 0.9985966682434082,
+              "exact": 0.99169921875
+            },
+            "random_mean": {
+              "token": 0.9922197490930558,
+              "exact": 0.9564697265625
+            },
+            "random_sd": {
+              "token": 0.010163565544112477,
+              "exact": 0.0554347135323064
+            }
+          }
+        },
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 0.9956401109789933,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.9116131589377725,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.48553309552120494,
+              "majority": 0.21105660877634894
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10499801140129922
+            },
+            "position": {
+              "accuracy": 0.8319460959175584,
+              "majority": 0.20363250696009547
+            },
+            "length": {
+              "accuracy": 0.38525564803804996,
+              "majority": 0.21105660877634894
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.3809001679514847,
+              "median_eta2": 0.08463658859184436,
+              "neurons_eta2_gt_0.2": 9
+            },
+            "position": {
+              "max_eta2": 0.2875361003011389,
+              "median_eta2": 0.025240819990463757,
+              "neurons_eta2_gt_0.2": 1
+            },
+            "length": {
+              "max_eta2": 0.028165218080185028,
+              "median_eta2": 0.003821293116997588,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_sd": {
+              "token": 0.0,
+              "exact": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "task": "rotate_left",
+      "seed": 47,
+      "baseline": {
+        "token": 1.0,
+        "exact": 1.0
+      },
+      "layers": [
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.9807098765432098,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.5740740740740741,
+              "majority": 0.21193470698421193
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.9776234567901234,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.6060956790123457,
+              "majority": 0.21193470698421193
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.9842401189064394,
+              "median_eta2": 0.697569556476092,
+              "neurons_eta2_gt_0.2": 58
+            },
+            "position": {
+              "max_eta2": 0.8151182414170374,
+              "median_eta2": 0.13377559491091223,
+              "neurons_eta2_gt_0.2": 24
+            },
+            "length": {
+              "max_eta2": 0.2264434648062756,
+              "median_eta2": 0.017862447116629793,
+              "neurons_eta2_gt_0.2": 1
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 0.9944692254066467,
+              "exact": 0.96728515625
+            },
+            "random_mean": {
+              "token": 0.9970034658908844,
+              "exact": 0.98271484375
+            },
+            "random_sd": {
+              "token": 0.0028586449208381675,
+              "exact": 0.016091367674857877
+            }
+          }
+        },
+        {
+          "residual_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.8641975308641975,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.46064814814814814,
+              "majority": 0.21193470698421193
+            }
+          },
+          "mlp_probes": {
+            "digit": {
+              "accuracy": 1.0,
+              "majority": 0.10623494781910624
+            },
+            "position": {
+              "accuracy": 0.7739197530864198,
+              "majority": 0.2055124431362055
+            },
+            "length": {
+              "accuracy": 0.41087962962962965,
+              "majority": 0.21193470698421193
+            }
+          },
+          "selectivity": {
+            "digit": {
+              "max_eta2": 0.6652317567340993,
+              "median_eta2": 0.15165864844062066,
+              "neurons_eta2_gt_0.2": 20
+            },
+            "position": {
+              "max_eta2": 0.18784840218949284,
+              "median_eta2": 0.04585613833952299,
+              "neurons_eta2_gt_0.2": 0
+            },
+            "length": {
+              "max_eta2": 0.054335206416285545,
+              "median_eta2": 0.009063343650778845,
+              "neurons_eta2_gt_0.2": 0
+            }
+          },
+          "ablation": {
+            "fraction": 0.09375,
+            "top_selective": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_mean": {
+              "token": 1.0,
+              "exact": 1.0
+            },
+            "random_sd": {
+              "token": 0.0,
+              "exact": 0.0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "cka": {
+    "copy": {
+      "copy": 1.0000000123019406,
+      "reverse": 0.0632358036598782,
+      "sort": 0.05890645065431466,
+      "rotate_left": 0.04574859007037102
+    },
+    "reverse": {
+      "copy": 0.06323580785803128,
+      "reverse": 1.000000011050517,
+      "sort": 0.06297042482594616,
+      "rotate_left": 0.11400999452676974
+    },
+    "sort": {
+      "copy": 0.058906416269002095,
+      "reverse": 0.06297042984503068,
+      "sort": 0.9999999990402907,
+      "rotate_left": 0.05699941815508482
+    },
+    "rotate_left": {
+      "copy": 0.04574859909601469,
+      "reverse": 0.11400989435353935,
+      "sort": 0.05699941657308327,
+      "rotate_left": 0.9999999955017621
+    }
+  }
+}

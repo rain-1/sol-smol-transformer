@@ -1,0 +1,1750 @@
+{
+  "metadata": {
+    "seed": 42,
+    "steps": 1000,
+    "eval_examples": 4096,
+    "device": "cuda",
+    "intervention": "zero ablation of output contribution"
+  },
+  "tasks": {
+    "copy": {
+      "config": {
+        "d_model": 8,
+        "n_heads": 1,
+        "n_layers": 1,
+        "d_ff": 8
+      },
+      "parameters": 756,
+      "baseline": {
+        "exact": 1.0,
+        "digit_exact": 1.0,
+        "token": 1.0,
+        "equals": 1.0
+      },
+      "layer_components": [
+        {
+          "layer": 0,
+          "component": "attention",
+          "ablated": {
+            "exact": 0.6005859375,
+            "digit_exact": 0.6005859375,
+            "token": 0.9161790996261986,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.3994140625,
+            "digit_exact": 0.3994140625,
+            "token": 0.08382090037380141,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "component": "mlp",
+          "ablated": {
+            "exact": 0.0,
+            "digit_exact": 0.99951171875,
+            "token": 0.833495855680156,
+            "equals": 0.0
+          },
+          "effect": {
+            "exact": 1.0,
+            "digit_exact": 0.00048828125,
+            "token": 0.16650414431984395,
+            "equals": 1.0
+          }
+        }
+      ],
+      "heads": [
+        {
+          "layer": 0,
+          "head": 0,
+          "output_weight_norm": 1.7134723663330078,
+          "ablated": {
+            "exact": 0.6005859375,
+            "digit_exact": 0.6005859375,
+            "token": 0.9161790996261986,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.3994140625,
+            "digit_exact": 0.3994140625,
+            "token": 0.08382090037380141,
+            "equals": 0.0
+          }
+        }
+      ],
+      "neurons": [
+        {
+          "layer": 0,
+          "neuron": 0,
+          "output_weight_norm": 0.7470762133598328,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 1,
+          "output_weight_norm": 0.9147146940231323,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 2,
+          "output_weight_norm": 0.7763592004776001,
+          "ablated": {
+            "exact": 0.999267578125,
+            "digit_exact": 1.0,
+            "token": 0.999878108239883,
+            "equals": 0.999267578125
+          },
+          "effect": {
+            "exact": 0.000732421875,
+            "digit_exact": 0.0,
+            "token": 0.00012189176011700997,
+            "equals": 0.000732421875
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 3,
+          "output_weight_norm": 1.2709301710128784,
+          "ablated": {
+            "exact": 0.9990234375,
+            "digit_exact": 0.9990234375,
+            "token": 0.9998374776531773,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0009765625,
+            "digit_exact": 0.0009765625,
+            "token": 0.00016252234682267996,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 4,
+          "output_weight_norm": 0.7255229949951172,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 5,
+          "output_weight_norm": 0.8576086163520813,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 6,
+          "output_weight_norm": 0.6359150409698486,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 7,
+          "output_weight_norm": 0.7763926982879639,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        }
+      ],
+      "equals_to_zero": {
+        "ablated": {
+          "exact": 0.0,
+          "digit_exact": 0.59033203125,
+          "token": 0.7391110027628799,
+          "equals": 0.0
+        },
+        "effect": {
+          "exact": 1.0,
+          "digit_exact": 0.40966796875,
+          "token": 0.2608889972371201,
+          "equals": 1.0
+        }
+      },
+      "zero_position_embedding": {
+        "ablated": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "effect": {
+          "exact": 0.0,
+          "digit_exact": 0.0,
+          "token": 0.0,
+          "equals": 0.0
+        }
+      },
+      "by_length": {
+        "2": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "3": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "4": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "5": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "6": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "7": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "8": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        }
+      }
+    },
+    "reverse": {
+      "config": {
+        "d_model": 16,
+        "n_heads": 2,
+        "n_layers": 2,
+        "d_ff": 16
+      },
+      "parameters": 3964,
+      "baseline": {
+        "exact": 1.0,
+        "digit_exact": 1.0,
+        "token": 1.0,
+        "equals": 1.0
+      },
+      "layer_components": [
+        {
+          "layer": 0,
+          "component": "attention",
+          "ablated": {
+            "exact": 0.005859375,
+            "digit_exact": 0.005859375,
+            "token": 0.4850885746790184,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.994140625,
+            "digit_exact": 0.994140625,
+            "token": 0.5149114253209817,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "component": "mlp",
+          "ablated": {
+            "exact": 0.08837890625,
+            "digit_exact": 0.08837890625,
+            "token": 0.5129205265724037,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.91162109375,
+            "digit_exact": 0.91162109375,
+            "token": 0.4870794734275963,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "component": "attention",
+          "ablated": {
+            "exact": 0.002197265625,
+            "digit_exact": 0.002197265625,
+            "token": 0.2584511620347798,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.997802734375,
+            "digit_exact": 0.997802734375,
+            "token": 0.7415488379652202,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "component": "mlp",
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        }
+      ],
+      "heads": [
+        {
+          "layer": 0,
+          "head": 0,
+          "output_weight_norm": 1.7582283020019531,
+          "ablated": {
+            "exact": 0.211669921875,
+            "digit_exact": 0.211669921875,
+            "token": 0.7179424670892248,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.788330078125,
+            "digit_exact": 0.788330078125,
+            "token": 0.2820575329107752,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "head": 1,
+          "output_weight_norm": 1.736512303352356,
+          "ablated": {
+            "exact": 0.097900390625,
+            "digit_exact": 0.097900390625,
+            "token": 0.6025516008451162,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.902099609375,
+            "digit_exact": 0.902099609375,
+            "token": 0.39744839915488384,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "head": 0,
+          "output_weight_norm": 3.2618210315704346,
+          "ablated": {
+            "exact": 0.330322265625,
+            "digit_exact": 0.330322265625,
+            "token": 0.7729562814887047,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.669677734375,
+            "digit_exact": 0.669677734375,
+            "token": 0.22704371851129534,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "head": 1,
+          "output_weight_norm": 3.2238364219665527,
+          "ablated": {
+            "exact": 0.27587890625,
+            "digit_exact": 0.27587890625,
+            "token": 0.7860393304079311,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.72412109375,
+            "digit_exact": 0.72412109375,
+            "token": 0.21396066959206894,
+            "equals": 0.0
+          }
+        }
+      ],
+      "neurons": [
+        {
+          "layer": 0,
+          "neuron": 0,
+          "output_weight_norm": 0.8436815738677979,
+          "ablated": {
+            "exact": 0.447265625,
+            "digit_exact": 0.447265625,
+            "token": 0.8338209003738014,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.552734375,
+            "digit_exact": 0.552734375,
+            "token": 0.1661790996261986,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 1,
+          "output_weight_norm": 0.7447062730789185,
+          "ablated": {
+            "exact": 0.685791015625,
+            "digit_exact": 0.685791015625,
+            "token": 0.9381196164472615,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.314208984375,
+            "digit_exact": 0.314208984375,
+            "token": 0.061880383552738505,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 2,
+          "output_weight_norm": 0.7054644823074341,
+          "ablated": {
+            "exact": 0.703125,
+            "digit_exact": 0.703125,
+            "token": 0.9395823175686657,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.296875,
+            "digit_exact": 0.296875,
+            "token": 0.060417682431334274,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 3,
+          "output_weight_norm": 0.9193528890609741,
+          "ablated": {
+            "exact": 0.39697265625,
+            "digit_exact": 0.39697265625,
+            "token": 0.7557695433122055,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.60302734375,
+            "digit_exact": 0.60302734375,
+            "token": 0.24423045668779453,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 4,
+          "output_weight_norm": 0.7579476237297058,
+          "ablated": {
+            "exact": 0.900634765625,
+            "digit_exact": 0.900634765625,
+            "token": 0.981675605395742,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.099365234375,
+            "digit_exact": 0.099365234375,
+            "token": 0.018324394604258054,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 5,
+          "output_weight_norm": 0.6689138412475586,
+          "ablated": {
+            "exact": 0.984619140625,
+            "digit_exact": 0.984619140625,
+            "token": 0.9973590118641313,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.015380859375,
+            "digit_exact": 0.015380859375,
+            "token": 0.0026409881358686604,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 6,
+          "output_weight_norm": 0.8523504137992859,
+          "ablated": {
+            "exact": 0.351806640625,
+            "digit_exact": 0.351806640625,
+            "token": 0.787908337396392,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.648193359375,
+            "digit_exact": 0.648193359375,
+            "token": 0.212091662603608,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 7,
+          "output_weight_norm": 0.7037569880485535,
+          "ablated": {
+            "exact": 0.96337890625,
+            "digit_exact": 0.96337890625,
+            "token": 0.9934584755403868,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.03662109375,
+            "digit_exact": 0.03662109375,
+            "token": 0.006541524459613202,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 8,
+          "output_weight_norm": 0.7180837988853455,
+          "ablated": {
+            "exact": 0.510498046875,
+            "digit_exact": 0.510498046875,
+            "token": 0.8747765317731188,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.489501953125,
+            "digit_exact": 0.489501953125,
+            "token": 0.12522346822688124,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 9,
+          "output_weight_norm": 0.7212668657302856,
+          "ablated": {
+            "exact": 0.694091796875,
+            "digit_exact": 0.694091796875,
+            "token": 0.9275962944904924,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.305908203125,
+            "digit_exact": 0.305908203125,
+            "token": 0.07240370550950759,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 10,
+          "output_weight_norm": 0.852871298789978,
+          "ablated": {
+            "exact": 0.989990234375,
+            "digit_exact": 0.989990234375,
+            "token": 0.9983341459450674,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.010009765625,
+            "digit_exact": 0.010009765625,
+            "token": 0.0016658540549325807,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 11,
+          "output_weight_norm": 0.9216902256011963,
+          "ablated": {
+            "exact": 0.593505859375,
+            "digit_exact": 0.593505859375,
+            "token": 0.9180481066146595,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.406494140625,
+            "digit_exact": 0.406494140625,
+            "token": 0.08195189338534048,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 12,
+          "output_weight_norm": 0.8760677576065063,
+          "ablated": {
+            "exact": 0.695068359375,
+            "digit_exact": 0.695068359375,
+            "token": 0.9183325207215992,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.304931640625,
+            "digit_exact": 0.304931640625,
+            "token": 0.08166747927840079,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 13,
+          "output_weight_norm": 0.8866315484046936,
+          "ablated": {
+            "exact": 0.48974609375,
+            "digit_exact": 0.48974609375,
+            "token": 0.8671379814724525,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.51025390625,
+            "digit_exact": 0.51025390625,
+            "token": 0.13286201852754753,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 14,
+          "output_weight_norm": 0.7515646815299988,
+          "ablated": {
+            "exact": 0.316162109375,
+            "digit_exact": 0.316162109375,
+            "token": 0.7874614009426296,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.683837890625,
+            "digit_exact": 0.683837890625,
+            "token": 0.21253859905737038,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 15,
+          "output_weight_norm": 0.8989281058311462,
+          "ablated": {
+            "exact": 0.56884765625,
+            "digit_exact": 0.56884765625,
+            "token": 0.8950918251259549,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.43115234375,
+            "digit_exact": 0.43115234375,
+            "token": 0.10490817487404513,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 0,
+          "output_weight_norm": 0.7738792896270752,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 1,
+          "output_weight_norm": 0.7769325971603394,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 2,
+          "output_weight_norm": 0.8546339273452759,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 3,
+          "output_weight_norm": 0.7219295501708984,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 4,
+          "output_weight_norm": 0.7576746940612793,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 5,
+          "output_weight_norm": 0.7892401218414307,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 6,
+          "output_weight_norm": 0.7032203078269958,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 7,
+          "output_weight_norm": 0.8826862573623657,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 8,
+          "output_weight_norm": 0.7444615960121155,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 9,
+          "output_weight_norm": 0.6231784224510193,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 10,
+          "output_weight_norm": 0.8437389135360718,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 11,
+          "output_weight_norm": 0.7834718227386475,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 12,
+          "output_weight_norm": 0.5630244016647339,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 13,
+          "output_weight_norm": 0.7931876182556152,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 14,
+          "output_weight_norm": 0.8190024495124817,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 1,
+          "neuron": 15,
+          "output_weight_norm": 1.0753858089447021,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        }
+      ],
+      "equals_to_zero": {
+        "ablated": {
+          "exact": 0.0,
+          "digit_exact": 0.0009765625,
+          "token": 0.10608646188850968,
+          "equals": 0.0
+        },
+        "effect": {
+          "exact": 1.0,
+          "digit_exact": 0.9990234375,
+          "token": 0.8939135381114903,
+          "equals": 1.0
+        }
+      },
+      "zero_position_embedding": {
+        "ablated": {
+          "exact": 0.00634765625,
+          "digit_exact": 0.00634765625,
+          "token": 0.37562977409393794,
+          "equals": 1.0
+        },
+        "effect": {
+          "exact": 0.99365234375,
+          "digit_exact": 0.99365234375,
+          "token": 0.6243702259060621,
+          "equals": 0.0
+        }
+      },
+      "by_length": {
+        "2": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "3": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "4": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "5": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "6": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "7": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "8": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        }
+      }
+    },
+    "sort": {
+      "config": {
+        "d_model": 16,
+        "n_heads": 1,
+        "n_layers": 1,
+        "d_ff": 16
+      },
+      "parameters": 2268,
+      "baseline": {
+        "exact": 0.989013671875,
+        "digit_exact": 0.989013671875,
+        "token": 0.9981309930115391,
+        "equals": 1.0
+      },
+      "layer_components": [
+        {
+          "layer": 0,
+          "component": "attention",
+          "ablated": {
+            "exact": 0.001953125,
+            "digit_exact": 0.001953125,
+            "token": 0.29323094425483504,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.987060546875,
+            "digit_exact": 0.987060546875,
+            "token": 0.7049000487567041,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "component": "mlp",
+          "ablated": {
+            "exact": 0.001953125,
+            "digit_exact": 0.057861328125,
+            "token": 0.38286201852754753,
+            "equals": 0.142333984375
+          },
+          "effect": {
+            "exact": 0.987060546875,
+            "digit_exact": 0.93115234375,
+            "token": 0.6152689744839915,
+            "equals": 0.857666015625
+          }
+        }
+      ],
+      "heads": [
+        {
+          "layer": 0,
+          "head": 0,
+          "output_weight_norm": 4.665163993835449,
+          "ablated": {
+            "exact": 0.001953125,
+            "digit_exact": 0.001953125,
+            "token": 0.29323094425483504,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.987060546875,
+            "digit_exact": 0.987060546875,
+            "token": 0.7049000487567041,
+            "equals": 0.0
+          }
+        }
+      ],
+      "neurons": [
+        {
+          "layer": 0,
+          "neuron": 0,
+          "output_weight_norm": 1.2001144886016846,
+          "ablated": {
+            "exact": 0.660888671875,
+            "digit_exact": 0.660888671875,
+            "token": 0.934340971883634,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.328125,
+            "digit_exact": 0.328125,
+            "token": 0.0637900211279051,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 1,
+          "output_weight_norm": 0.9583691358566284,
+          "ablated": {
+            "exact": 0.57763671875,
+            "digit_exact": 0.57763671875,
+            "token": 0.9102470339671704,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.411376953125,
+            "digit_exact": 0.411376953125,
+            "token": 0.08788395904436863,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 2,
+          "output_weight_norm": 1.0671453475952148,
+          "ablated": {
+            "exact": 0.72900390625,
+            "digit_exact": 0.72900390625,
+            "token": 0.9457175361612221,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.260009765625,
+            "digit_exact": 0.260009765625,
+            "token": 0.05241345685031695,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 3,
+          "output_weight_norm": 0.9277482032775879,
+          "ablated": {
+            "exact": 0.906982421875,
+            "digit_exact": 0.906982421875,
+            "token": 0.982528847716561,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.08203125,
+            "digit_exact": 0.08203125,
+            "token": 0.015602145294978054,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 4,
+          "output_weight_norm": 1.6675875186920166,
+          "ablated": {
+            "exact": 0.1279296875,
+            "digit_exact": 0.1279296875,
+            "token": 0.6757679180887372,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.861083984375,
+            "digit_exact": 0.861083984375,
+            "token": 0.3223630749228019,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 5,
+          "output_weight_norm": 0.9482559561729431,
+          "ablated": {
+            "exact": 0.151123046875,
+            "digit_exact": 0.151123046875,
+            "token": 0.6898667316756054,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.837890625,
+            "digit_exact": 0.837890625,
+            "token": 0.30826426133593365,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 6,
+          "output_weight_norm": 1.1807972192764282,
+          "ablated": {
+            "exact": 0.932861328125,
+            "digit_exact": 0.932861328125,
+            "token": 0.9885015439622948,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.05615234375,
+            "digit_exact": 0.05615234375,
+            "token": 0.009629449049244232,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 7,
+          "output_weight_norm": 2.216942071914673,
+          "ablated": {
+            "exact": 0.46044921875,
+            "digit_exact": 0.46044921875,
+            "token": 0.8739639200390054,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.528564453125,
+            "digit_exact": 0.528564453125,
+            "token": 0.12416707297253371,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 8,
+          "output_weight_norm": 1.1684467792510986,
+          "ablated": {
+            "exact": 0.647216796875,
+            "digit_exact": 0.647216796875,
+            "token": 0.9313343084674143,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.341796875,
+            "digit_exact": 0.341796875,
+            "token": 0.0667966845441248,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 9,
+          "output_weight_norm": 0.9007513523101807,
+          "ablated": {
+            "exact": 0.656494140625,
+            "digit_exact": 0.656494140625,
+            "token": 0.9299122379327157,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.33251953125,
+            "digit_exact": 0.33251953125,
+            "token": 0.06821875507882336,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 10,
+          "output_weight_norm": 0.9722013473510742,
+          "ablated": {
+            "exact": 0.94921875,
+            "digit_exact": 0.94921875,
+            "token": 0.9908174874045181,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.039794921875,
+            "digit_exact": 0.039794921875,
+            "token": 0.0073135056070209314,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 11,
+          "output_weight_norm": 1.3428401947021484,
+          "ablated": {
+            "exact": 0.960693359375,
+            "digit_exact": 0.967041015625,
+            "token": 0.9934178449536811,
+            "equals": 0.99365234375
+          },
+          "effect": {
+            "exact": 0.0283203125,
+            "digit_exact": 0.02197265625,
+            "token": 0.004713148057857941,
+            "equals": 0.00634765625
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 12,
+          "output_weight_norm": 0.9936836957931519,
+          "ablated": {
+            "exact": 0.745361328125,
+            "digit_exact": 0.745361328125,
+            "token": 0.9485210466439136,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.24365234375,
+            "digit_exact": 0.24365234375,
+            "token": 0.0496099463676255,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 13,
+          "output_weight_norm": 1.9135477542877197,
+          "ablated": {
+            "exact": 0.905029296875,
+            "digit_exact": 0.915283203125,
+            "token": 0.982041280676093,
+            "equals": 0.98974609375
+          },
+          "effect": {
+            "exact": 0.083984375,
+            "digit_exact": 0.07373046875,
+            "token": 0.016089712335446094,
+            "equals": 0.01025390625
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 14,
+          "output_weight_norm": 1.2691725492477417,
+          "ablated": {
+            "exact": 0.660888671875,
+            "digit_exact": 0.660888671875,
+            "token": 0.931862506094588,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.328125,
+            "digit_exact": 0.328125,
+            "token": 0.06626848691695109,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 15,
+          "output_weight_norm": 1.1098116636276245,
+          "ablated": {
+            "exact": 0.805419921875,
+            "digit_exact": 0.805419921875,
+            "token": 0.9633105802047781,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.18359375,
+            "digit_exact": 0.18359375,
+            "token": 0.03482041280676096,
+            "equals": 0.0
+          }
+        }
+      ],
+      "equals_to_zero": {
+        "ablated": {
+          "exact": 0.0,
+          "digit_exact": 0.0009765625,
+          "token": 0.1502112790508695,
+          "equals": 0.0
+        },
+        "effect": {
+          "exact": 0.989013671875,
+          "digit_exact": 0.988037109375,
+          "token": 0.8479197139606696,
+          "equals": 1.0
+        }
+      },
+      "zero_position_embedding": {
+        "ablated": {
+          "exact": 0.0185546875,
+          "digit_exact": 0.0185546875,
+          "token": 0.4184950430684219,
+          "equals": 1.0
+        },
+        "effect": {
+          "exact": 0.970458984375,
+          "digit_exact": 0.970458984375,
+          "token": 0.5796359499431172,
+          "equals": 0.0
+        }
+      },
+      "by_length": {
+        "2": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "3": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "4": {
+          "exact": 0.994140625,
+          "digit_exact": 0.994140625,
+          "token": 0.998828125,
+          "equals": 1.0
+        },
+        "5": {
+          "exact": 0.9921875,
+          "digit_exact": 0.9921875,
+          "token": 0.9986979166666666,
+          "equals": 1.0
+        },
+        "6": {
+          "exact": 0.9921875,
+          "digit_exact": 0.9921875,
+          "token": 0.9988839285714286,
+          "equals": 1.0
+        },
+        "7": {
+          "exact": 0.998046875,
+          "digit_exact": 0.998046875,
+          "token": 0.999755859375,
+          "equals": 1.0
+        },
+        "8": {
+          "exact": 0.97265625,
+          "digit_exact": 0.97265625,
+          "token": 0.9969618055555556,
+          "equals": 1.0
+        }
+      }
+    },
+    "rotate_left": {
+      "config": {
+        "d_model": 8,
+        "n_heads": 1,
+        "n_layers": 1,
+        "d_ff": 8
+      },
+      "parameters": 756,
+      "baseline": {
+        "exact": 1.0,
+        "digit_exact": 1.0,
+        "token": 1.0,
+        "equals": 1.0
+      },
+      "layer_components": [
+        {
+          "layer": 0,
+          "component": "attention",
+          "ablated": {
+            "exact": 0.002685546875,
+            "digit_exact": 0.002685546875,
+            "token": 0.2484154071184788,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.997314453125,
+            "digit_exact": 0.997314453125,
+            "token": 0.7515845928815212,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "component": "mlp",
+          "ablated": {
+            "exact": 0.5537109375,
+            "digit_exact": 0.937744140625,
+            "token": 0.9191857630424183,
+            "equals": 0.57666015625
+          },
+          "effect": {
+            "exact": 0.4462890625,
+            "digit_exact": 0.062255859375,
+            "token": 0.08081423695758172,
+            "equals": 0.42333984375
+          }
+        }
+      ],
+      "heads": [
+        {
+          "layer": 0,
+          "head": 0,
+          "output_weight_norm": 4.788918972015381,
+          "ablated": {
+            "exact": 0.002685546875,
+            "digit_exact": 0.002685546875,
+            "token": 0.2484154071184788,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.997314453125,
+            "digit_exact": 0.997314453125,
+            "token": 0.7515845928815212,
+            "equals": 0.0
+          }
+        }
+      ],
+      "neurons": [
+        {
+          "layer": 0,
+          "neuron": 0,
+          "output_weight_norm": 0.8211227655410767,
+          "ablated": {
+            "exact": 0.994384765625,
+            "digit_exact": 0.994384765625,
+            "token": 0.9990654965057696,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.005615234375,
+            "digit_exact": 0.005615234375,
+            "token": 0.0009345034942304098,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 1,
+          "output_weight_norm": 1.0899914503097534,
+          "ablated": {
+            "exact": 0.999755859375,
+            "digit_exact": 0.999755859375,
+            "token": 0.9999593694132943,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.000244140625,
+            "digit_exact": 0.000244140625,
+            "token": 4.063058670566999e-05,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 2,
+          "output_weight_norm": 1.0128055810928345,
+          "ablated": {
+            "exact": 0.998291015625,
+            "digit_exact": 1.0,
+            "token": 0.9997155858930603,
+            "equals": 0.998291015625
+          },
+          "effect": {
+            "exact": 0.001708984375,
+            "digit_exact": 0.0,
+            "token": 0.00028441410693968994,
+            "equals": 0.001708984375
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 3,
+          "output_weight_norm": 1.12026047706604,
+          "ablated": {
+            "exact": 0.998291015625,
+            "digit_exact": 0.998291015625,
+            "token": 0.9997155858930603,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.001708984375,
+            "digit_exact": 0.001708984375,
+            "token": 0.00028441410693968994,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 4,
+          "output_weight_norm": 1.0040241479873657,
+          "ablated": {
+            "exact": 1.0,
+            "digit_exact": 1.0,
+            "token": 1.0,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0,
+            "digit_exact": 0.0,
+            "token": 0.0,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 5,
+          "output_weight_norm": 0.9761719107627869,
+          "ablated": {
+            "exact": 0.9541015625,
+            "digit_exact": 0.9541015625,
+            "token": 0.9923614496993337,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.0458984375,
+            "digit_exact": 0.0458984375,
+            "token": 0.007638550300666291,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 6,
+          "output_weight_norm": 1.0223010778427124,
+          "ablated": {
+            "exact": 0.957275390625,
+            "digit_exact": 0.957275390625,
+            "token": 0.9928896473265074,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.042724609375,
+            "digit_exact": 0.042724609375,
+            "token": 0.0071103526734925815,
+            "equals": 0.0
+          }
+        },
+        {
+          "layer": 0,
+          "neuron": 7,
+          "output_weight_norm": 0.6608062982559204,
+          "ablated": {
+            "exact": 0.97705078125,
+            "digit_exact": 0.97705078125,
+            "token": 0.9961807248496668,
+            "equals": 1.0
+          },
+          "effect": {
+            "exact": 0.02294921875,
+            "digit_exact": 0.02294921875,
+            "token": 0.003819275150333201,
+            "equals": 0.0
+          }
+        }
+      ],
+      "equals_to_zero": {
+        "ablated": {
+          "exact": 0.0,
+          "digit_exact": 0.23681640625,
+          "token": 0.7065659028116366,
+          "equals": 0.0
+        },
+        "effect": {
+          "exact": 1.0,
+          "digit_exact": 0.76318359375,
+          "token": 0.29343409718836344,
+          "equals": 1.0
+        }
+      },
+      "zero_position_embedding": {
+        "ablated": {
+          "exact": 0.056884765625,
+          "digit_exact": 0.056884765625,
+          "token": 0.4306842190801235,
+          "equals": 1.0
+        },
+        "effect": {
+          "exact": 0.943115234375,
+          "digit_exact": 0.943115234375,
+          "token": 0.5693157809198766,
+          "equals": 0.0
+        }
+      },
+      "by_length": {
+        "2": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "3": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "4": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "5": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "6": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "7": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        },
+        "8": {
+          "exact": 1.0,
+          "digit_exact": 1.0,
+          "token": 1.0,
+          "equals": 1.0
+        }
+      }
+    }
+  }
+}

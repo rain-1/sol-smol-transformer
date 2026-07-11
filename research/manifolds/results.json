@@ -1,0 +1,1079 @@
+{
+  "protocol": {
+    "samples_per_length": 1024,
+    "seed": 31415,
+    "translation_lengths": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "rotation_lengths": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  "checkpoints": {
+    "translation": "checkpoints/translate-20260711-104508.pt",
+    "multitask": "checkpoints/multi_task-20260711-104631.pt",
+    "translation_config": {
+      "seq_len": 9,
+      "vocab_size": 20,
+      "d_model": 16,
+      "n_heads": 1,
+      "n_layers": 1,
+      "d_ff": 16,
+      "dropout": 0.0
+    },
+    "multitask_config": {
+      "seq_len": 10,
+      "vocab_size": 20,
+      "d_model": 32,
+      "n_heads": 4,
+      "n_layers": 2,
+      "d_ff": 64,
+      "dropout": 0.0
+    }
+  },
+  "translation": {
+    "raw_token_embeddings": {
+      "paired_cosine": [
+        0.025653235614299774,
+        0.11980044841766357,
+        -0.2405581772327423
+      ],
+      "mean_paired_cosine": -0.03170149773359299,
+      "paired_distance": [
+        5.436172008514404,
+        5.700839519500732,
+        5.339094638824463
+      ],
+      "mean_paired_distance": 5.492035865783691,
+      "distance_matrix_digit_rows_letter_columns": [
+        [
+          5.436172008514404,
+          4.675092697143555,
+          3.5501811504364014
+        ],
+        [
+          5.939129829406738,
+          5.700839519500732,
+          6.483717441558838
+        ],
+        [
+          4.537609100341797,
+          5.700516700744629,
+          5.339094638824463
+        ]
+      ],
+      "procrustes_three_point_relative_error": 0.24065114557743073,
+      "note": "The three paired vocabulary vectors are insufficient to establish a general linear map."
+    },
+    "lengths": {
+      "2": {
+        "accuracy": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "behavioral_involution": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "stages": {
+          "context_input": {
+            "digit_to_letter": {
+              "r2": 0.9999998807907104,
+              "mean_cosine": 1.0,
+              "relative_rmse": 0.00026802188949659467
+            },
+            "letter_to_digit": {
+              "r2": 0.9999999403953552,
+              "mean_cosine": 1.0,
+              "relative_rmse": 0.00015094246191438287
+            },
+            "paired_state_cosine_before_mapping": -0.0705706849694252
+          },
+          "layer_1": {
+            "digit_to_letter": {
+              "r2": 0.9996893405914307,
+              "mean_cosine": 0.9998935461044312,
+              "relative_rmse": 0.015634214505553246
+            },
+            "letter_to_digit": {
+              "r2": 0.9999849200248718,
+              "mean_cosine": 0.9999954700469971,
+              "relative_rmse": 0.003436266677454114
+            },
+            "paired_state_cosine_before_mapping": -0.22620543837547302
+          },
+          "final": {
+            "digit_to_letter": {
+              "r2": 0.9997763633728027,
+              "mean_cosine": 0.9999260902404785,
+              "relative_rmse": 0.012457192875444889
+            },
+            "letter_to_digit": {
+              "r2": 0.9999862313270569,
+              "mean_cosine": 0.9999960660934448,
+              "relative_rmse": 0.003104118863120675
+            },
+            "paired_state_cosine_before_mapping": 0.0019050952978432178
+          }
+        }
+      },
+      "3": {
+        "accuracy": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "behavioral_involution": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "stages": {
+          "context_input": {
+            "digit_to_letter": {
+              "r2": 0.9999999403953552,
+              "mean_cosine": 1.0,
+              "relative_rmse": 0.0002180872979806736
+            },
+            "letter_to_digit": {
+              "r2": 0.9999999403953552,
+              "mean_cosine": 1.0,
+              "relative_rmse": 0.00023880042135715485
+            },
+            "paired_state_cosine_before_mapping": -0.06723185628652573
+          },
+          "layer_1": {
+            "digit_to_letter": {
+              "r2": 0.9988552331924438,
+              "mean_cosine": 0.9994608759880066,
+              "relative_rmse": 0.029791267588734627
+            },
+            "letter_to_digit": {
+              "r2": 0.9998259544372559,
+              "mean_cosine": 0.9999329447746277,
+              "relative_rmse": 0.011556839570403099
+            },
+            "paired_state_cosine_before_mapping": -0.22164428234100342
+          },
+          "final": {
+            "digit_to_letter": {
+              "r2": 0.9988265633583069,
+              "mean_cosine": 0.9996140003204346,
+              "relative_rmse": 0.02830515429377556
+            },
+            "letter_to_digit": {
+              "r2": 0.999789834022522,
+              "mean_cosine": 0.9999305605888367,
+              "relative_rmse": 0.012085058726370335
+            },
+            "paired_state_cosine_before_mapping": -0.005757211707532406
+          }
+        }
+      },
+      "4": {
+        "accuracy": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "behavioral_involution": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "stages": {
+          "context_input": {
+            "digit_to_letter": {
+              "r2": 0.9999998211860657,
+              "mean_cosine": 1.0,
+              "relative_rmse": 0.0003526800428517163
+            },
+            "letter_to_digit": {
+              "r2": 0.9999998807907104,
+              "mean_cosine": 1.0,
+              "relative_rmse": 0.00026416440960019827
+            },
+            "paired_state_cosine_before_mapping": -0.07425472140312195
+          },
+          "layer_1": {
+            "digit_to_letter": {
+              "r2": 0.9988941550254822,
+              "mean_cosine": 0.9995325803756714,
+              "relative_rmse": 0.029121994972229004
+            },
+            "letter_to_digit": {
+              "r2": 0.9997099041938782,
+              "mean_cosine": 0.9999053478240967,
+              "relative_rmse": 0.014758131466805935
+            },
+            "paired_state_cosine_before_mapping": -0.21933141350746155
+          },
+          "final": {
+            "digit_to_letter": {
+              "r2": 0.9989013075828552,
+              "mean_cosine": 0.9996403455734253,
+              "relative_rmse": 0.02718721330165863
+            },
+            "letter_to_digit": {
+              "r2": 0.9997245073318481,
+              "mean_cosine": 0.9999089241027832,
+              "relative_rmse": 0.01374835055321455
+            },
+            "paired_state_cosine_before_mapping": -0.013637453317642212
+          }
+        }
+      },
+      "5": {
+        "accuracy": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "behavioral_involution": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "stages": {
+          "context_input": {
+            "digit_to_letter": {
+              "r2": 1.0,
+              "mean_cosine": 1.0,
+              "relative_rmse": 7.724919851170853e-05
+            },
+            "letter_to_digit": {
+              "r2": 1.0,
+              "mean_cosine": 1.0,
+              "relative_rmse": 2.9440931029967032e-05
+            },
+            "paired_state_cosine_before_mapping": -0.06583330780267715
+          },
+          "layer_1": {
+            "digit_to_letter": {
+              "r2": 0.9991301894187927,
+              "mean_cosine": 0.9996297955513,
+              "relative_rmse": 0.025948626920580864
+            },
+            "letter_to_digit": {
+              "r2": 0.9997116923332214,
+              "mean_cosine": 0.9998979568481445,
+              "relative_rmse": 0.014843485318124294
+            },
+            "paired_state_cosine_before_mapping": -0.21852658689022064
+          },
+          "final": {
+            "digit_to_letter": {
+              "r2": 0.9992291927337646,
+              "mean_cosine": 0.9997472763061523,
+              "relative_rmse": 0.02279110811650753
+            },
+            "letter_to_digit": {
+              "r2": 0.9997161626815796,
+              "mean_cosine": 0.9999074935913086,
+              "relative_rmse": 0.013954157009720802
+            },
+            "paired_state_cosine_before_mapping": -0.005898015107959509
+          }
+        }
+      },
+      "6": {
+        "accuracy": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "behavioral_involution": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "stages": {
+          "context_input": {
+            "digit_to_letter": {
+              "r2": 0.9999947547912598,
+              "mean_cosine": 0.9999986886978149,
+              "relative_rmse": 0.0018705192487686872
+            },
+            "letter_to_digit": {
+              "r2": 0.9999999403953552,
+              "mean_cosine": 1.0,
+              "relative_rmse": 0.00020311847038101405
+            },
+            "paired_state_cosine_before_mapping": -0.07113607227802277
+          },
+          "layer_1": {
+            "digit_to_letter": {
+              "r2": 0.9992117881774902,
+              "mean_cosine": 0.9996811747550964,
+              "relative_rmse": 0.024639206007122993
+            },
+            "letter_to_digit": {
+              "r2": 0.9997503161430359,
+              "mean_cosine": 0.9999160766601562,
+              "relative_rmse": 0.013722488656640053
+            },
+            "paired_state_cosine_before_mapping": -0.21730336546897888
+          },
+          "final": {
+            "digit_to_letter": {
+              "r2": 0.999393105506897,
+              "mean_cosine": 0.9998016357421875,
+              "relative_rmse": 0.020156918093562126
+            },
+            "letter_to_digit": {
+              "r2": 0.999754786491394,
+              "mean_cosine": 0.9999206066131592,
+              "relative_rmse": 0.01293350663036108
+            },
+            "paired_state_cosine_before_mapping": -0.01123700849711895
+          }
+        }
+      },
+      "7": {
+        "accuracy": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "behavioral_involution": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "stages": {
+          "context_input": {
+            "digit_to_letter": {
+              "r2": 0.9999997019767761,
+              "mean_cosine": 1.0,
+              "relative_rmse": 0.0004302631423342973
+            },
+            "letter_to_digit": {
+              "r2": 1.0,
+              "mean_cosine": 1.0,
+              "relative_rmse": 9.962501644622535e-05
+            },
+            "paired_state_cosine_before_mapping": -0.07046104967594147
+          },
+          "layer_1": {
+            "digit_to_letter": {
+              "r2": 0.9992882013320923,
+              "mean_cosine": 0.9997130036354065,
+              "relative_rmse": 0.023404229432344437
+            },
+            "letter_to_digit": {
+              "r2": 0.9997583627700806,
+              "mean_cosine": 0.9999216794967651,
+              "relative_rmse": 0.013476938009262085
+            },
+            "paired_state_cosine_before_mapping": -0.21691186726093292
+          },
+          "final": {
+            "digit_to_letter": {
+              "r2": 0.9994608163833618,
+              "mean_cosine": 0.9998248815536499,
+              "relative_rmse": 0.018975982442498207
+            },
+            "letter_to_digit": {
+              "r2": 0.9997609257698059,
+              "mean_cosine": 0.9999232292175293,
+              "relative_rmse": 0.012741409242153168
+            },
+            "paired_state_cosine_before_mapping": -0.011800129897892475
+          }
+        }
+      },
+      "8": {
+        "accuracy": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "behavioral_involution": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "stages": {
+          "context_input": {
+            "digit_to_letter": {
+              "r2": 0.9999995231628418,
+              "mean_cosine": 0.9999998211860657,
+              "relative_rmse": 0.0005562988226301968
+            },
+            "letter_to_digit": {
+              "r2": 1.0,
+              "mean_cosine": 1.0,
+              "relative_rmse": 0.00011317617463646457
+            },
+            "paired_state_cosine_before_mapping": -0.06912214308977127
+          },
+          "layer_1": {
+            "digit_to_letter": {
+              "r2": 0.9994223713874817,
+              "mean_cosine": 0.9997686743736267,
+              "relative_rmse": 0.021004337817430496
+            },
+            "letter_to_digit": {
+              "r2": 0.9996944069862366,
+              "mean_cosine": 0.9998997449874878,
+              "relative_rmse": 0.015066295862197876
+            },
+            "paired_state_cosine_before_mapping": -0.21660877764225006
+          },
+          "final": {
+            "digit_to_letter": {
+              "r2": 0.9995919466018677,
+              "mean_cosine": 0.9998684525489807,
+              "relative_rmse": 0.01646624505519867
+            },
+            "letter_to_digit": {
+              "r2": 0.999696671962738,
+              "mean_cosine": 0.99989914894104,
+              "relative_rmse": 0.014305577613413334
+            },
+            "paired_state_cosine_before_mapping": -0.01404635701328516
+          }
+        }
+      }
+    },
+    "aggregate": {
+      "context_input": {
+        "short_length_train_to_long_length_test_digit_to_letter": {
+          "r2": 0.9833881855010986,
+          "mean_cosine": 0.9948761463165283,
+          "relative_rmse": 0.10506264120340347
+        }
+      },
+      "layer_1": {
+        "short_length_train_to_long_length_test_digit_to_letter": {
+          "r2": 0.9504512548446655,
+          "mean_cosine": 0.9871852397918701,
+          "relative_rmse": 0.19522683322429657
+        }
+      },
+      "final": {
+        "short_length_train_to_long_length_test_digit_to_letter": {
+          "r2": 0.9804024696350098,
+          "mean_cosine": 0.9939398169517517,
+          "relative_rmse": 0.11448334157466888
+        }
+      }
+    }
+  },
+  "cyclic_rotation": {
+    "lengths": {
+      "3": {
+        "accuracy": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "stages": {
+          "context_input": {
+            "token_following_affine": {
+              "r2": 1.0,
+              "mean_cosine": 1.0,
+              "relative_rmse": 1.0791105751195573e-06
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9794009923934937,
+              "relative_rmse": 0.20778292417526245
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.06087011098861694,
+              "mean_cosine": 0.46027514338493347,
+              "relative_rmse": 0.887997031211853
+            },
+            "one_step_map_orbit_closure_relative_error": 0.24273830652236938,
+            "position_similarity_circulant_relative_error": 0.08364401012659073,
+            "offset_kernel_fourier_power": [
+              0.7423049807548523,
+              0.2576949894428253
+            ]
+          },
+          "layer_1": {
+            "token_following_affine": {
+              "r2": 0.983530580997467,
+              "mean_cosine": 0.9938424825668335,
+              "relative_rmse": 0.111388199031353
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.8275822401046753,
+              "relative_rmse": 0.5501098036766052
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.7095010876655579,
+              "mean_cosine": 0.8782452940940857,
+              "relative_rmse": 0.46781277656555176
+            },
+            "one_step_map_orbit_closure_relative_error": 0.5935156941413879,
+            "position_similarity_circulant_relative_error": 0.5997812747955322,
+            "offset_kernel_fourier_power": [
+              0.7864863276481628,
+              0.21351368725299835
+            ]
+          },
+          "layer_2": {
+            "token_following_affine": {
+              "r2": 0.9108510613441467,
+              "mean_cosine": 0.9661612510681152,
+              "relative_rmse": 0.28337353467941284
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9393482208251953,
+              "relative_rmse": 0.37466269731521606
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.17034459114074707,
+              "mean_cosine": 0.5007632970809937,
+              "relative_rmse": 0.8644701838493347
+            },
+            "one_step_map_orbit_closure_relative_error": 0.12411946058273315,
+            "position_similarity_circulant_relative_error": 0.12327651679515839,
+            "offset_kernel_fourier_power": [
+              0.7839658260345459,
+              0.21603421866893768
+            ]
+          },
+          "final": {
+            "token_following_affine": {
+              "r2": 0.9307245016098022,
+              "mean_cosine": 0.9703165888786316,
+              "relative_rmse": 0.2473680078983307
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9421216249465942,
+              "relative_rmse": 0.34145599603652954
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.1552181839942932,
+              "mean_cosine": 0.5031759738922119,
+              "relative_rmse": 0.8638255596160889
+            },
+            "one_step_map_orbit_closure_relative_error": 0.12197426706552505,
+            "position_similarity_circulant_relative_error": 0.11704497039318085,
+            "offset_kernel_fourier_power": [
+              0.7957785725593567,
+              0.2042214721441269
+            ]
+          }
+        }
+      },
+      "4": {
+        "accuracy": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "stages": {
+          "context_input": {
+            "token_following_affine": {
+              "r2": 1.0,
+              "mean_cosine": 1.0,
+              "relative_rmse": 2.4599632979516173e-06
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9734230041503906,
+              "relative_rmse": 0.23479969799518585
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.0747365951538086,
+              "mean_cosine": 0.45667481422424316,
+              "relative_rmse": 0.8896601796150208
+            },
+            "one_step_map_orbit_closure_relative_error": 0.29155999422073364,
+            "position_similarity_circulant_relative_error": 0.10753516852855682,
+            "offset_kernel_fourier_power": [
+              0.6351168751716614,
+              0.2028413861989975,
+              0.1620417982339859
+            ]
+          },
+          "layer_1": {
+            "token_following_affine": {
+              "r2": 0.9816328883171082,
+              "mean_cosine": 0.994163990020752,
+              "relative_rmse": 0.12277603149414062
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.8414170145988464,
+              "relative_rmse": 0.5931782126426697
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.7319216728210449,
+              "mean_cosine": 0.8813797831535339,
+              "relative_rmse": 0.46905505657196045
+            },
+            "one_step_map_orbit_closure_relative_error": 0.4728294014930725,
+            "position_similarity_circulant_relative_error": 0.6541900038719177,
+            "offset_kernel_fourier_power": [
+              0.6090673208236694,
+              0.390180379152298,
+              0.0007523290696553886
+            ]
+          },
+          "layer_2": {
+            "token_following_affine": {
+              "r2": 0.9051399230957031,
+              "mean_cosine": 0.9671270847320557,
+              "relative_rmse": 0.29239094257354736
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9394412040710449,
+              "relative_rmse": 0.4073496162891388
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.16074836254119873,
+              "mean_cosine": 0.4949023425579071,
+              "relative_rmse": 0.8696977496147156
+            },
+            "one_step_map_orbit_closure_relative_error": 0.1868150532245636,
+            "position_similarity_circulant_relative_error": 0.11028037220239639,
+            "offset_kernel_fourier_power": [
+              0.6859447956085205,
+              0.18727168440818787,
+              0.12678347527980804
+            ]
+          },
+          "final": {
+            "token_following_affine": {
+              "r2": 0.933387041091919,
+              "mean_cosine": 0.972200870513916,
+              "relative_rmse": 0.24232742190361023
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9394369125366211,
+              "relative_rmse": 0.3517802059650421
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.152951180934906,
+              "mean_cosine": 0.5042506456375122,
+              "relative_rmse": 0.8641265034675598
+            },
+            "one_step_map_orbit_closure_relative_error": 0.16789329051971436,
+            "position_similarity_circulant_relative_error": 0.10174483060836792,
+            "offset_kernel_fourier_power": [
+              0.7082701921463013,
+              0.17363205552101135,
+              0.1180976927280426
+            ]
+          }
+        }
+      },
+      "5": {
+        "accuracy": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "stages": {
+          "context_input": {
+            "token_following_affine": {
+              "r2": 1.0,
+              "mean_cosine": 1.0,
+              "relative_rmse": 2.770874743873719e-06
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9711387753486633,
+              "relative_rmse": 0.24340657889842987
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.08521389961242676,
+              "mean_cosine": 0.4560779631137848,
+              "relative_rmse": 0.890188992023468
+            },
+            "one_step_map_orbit_closure_relative_error": 0.2651417553424835,
+            "position_similarity_circulant_relative_error": 0.13140177726745605,
+            "offset_kernel_fourier_power": [
+              0.6330853700637817,
+              0.20488324761390686,
+              0.1620314121246338
+            ]
+          },
+          "layer_1": {
+            "token_following_affine": {
+              "r2": 0.9835913181304932,
+              "mean_cosine": 0.9933652877807617,
+              "relative_rmse": 0.12079370021820068
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9167796969413757,
+              "relative_rmse": 0.4955671727657318
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.7459920644760132,
+              "mean_cosine": 0.8717619180679321,
+              "relative_rmse": 0.475259393453598
+            },
+            "one_step_map_orbit_closure_relative_error": 0.33496466279029846,
+            "position_similarity_circulant_relative_error": 0.5446959733963013,
+            "offset_kernel_fourier_power": [
+              0.36029699444770813,
+              0.6305162906646729,
+              0.00918672140687704
+            ]
+          },
+          "layer_2": {
+            "token_following_affine": {
+              "r2": 0.9032968878746033,
+              "mean_cosine": 0.9701400995254517,
+              "relative_rmse": 0.29821476340293884
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9449642300605774,
+              "relative_rmse": 0.40149471163749695
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.13714629411697388,
+              "mean_cosine": 0.4583284854888916,
+              "relative_rmse": 0.8907944560050964
+            },
+            "one_step_map_orbit_closure_relative_error": 0.24595868587493896,
+            "position_similarity_circulant_relative_error": 0.11206896603107452,
+            "offset_kernel_fourier_power": [
+              0.6333743929862976,
+              0.22479215264320374,
+              0.14183352887630463
+            ]
+          },
+          "final": {
+            "token_following_affine": {
+              "r2": 0.9457759261131287,
+              "mean_cosine": 0.9772332310676575,
+              "relative_rmse": 0.2203141748905182
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9478780627250671,
+              "relative_rmse": 0.32608911395072937
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.13492608070373535,
+              "mean_cosine": 0.4763314425945282,
+              "relative_rmse": 0.8799803853034973
+            },
+            "one_step_map_orbit_closure_relative_error": 0.2226460576057434,
+            "position_similarity_circulant_relative_error": 0.10285559296607971,
+            "offset_kernel_fourier_power": [
+              0.6665141582489014,
+              0.20411907136440277,
+              0.12936677038669586
+            ]
+          }
+        }
+      },
+      "6": {
+        "accuracy": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "stages": {
+          "context_input": {
+            "token_following_affine": {
+              "r2": 1.0,
+              "mean_cosine": 1.0,
+              "relative_rmse": 5.878715455764905e-06
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9755241274833679,
+              "relative_rmse": 0.22482065856456757
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.08874773979187012,
+              "mean_cosine": 0.45077526569366455,
+              "relative_rmse": 0.892585277557373
+            },
+            "one_step_map_orbit_closure_relative_error": 0.24661819636821747,
+            "position_similarity_circulant_relative_error": 0.1452089101076126,
+            "offset_kernel_fourier_power": [
+              0.5625755190849304,
+              0.1763918101787567,
+              0.13000085949897766,
+              0.1310318410396576
+            ]
+          },
+          "layer_1": {
+            "token_following_affine": {
+              "r2": 0.9818639159202576,
+              "mean_cosine": 0.9924896955490112,
+              "relative_rmse": 0.12939445674419403
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9543017148971558,
+              "relative_rmse": 0.42142510414123535
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.7578111886978149,
+              "mean_cosine": 0.8691613674163818,
+              "relative_rmse": 0.47284695506095886
+            },
+            "one_step_map_orbit_closure_relative_error": 0.3282826244831085,
+            "position_similarity_circulant_relative_error": 0.4073438346385956,
+            "offset_kernel_fourier_power": [
+              0.20366770029067993,
+              0.7723459005355835,
+              0.011643443256616592,
+              0.012342974543571472
+            ]
+          },
+          "layer_2": {
+            "token_following_affine": {
+              "r2": 0.9066870212554932,
+              "mean_cosine": 0.9704723358154297,
+              "relative_rmse": 0.29397502541542053
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9515470862388611,
+              "relative_rmse": 0.37436941266059875
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.1375848650932312,
+              "mean_cosine": 0.44669899344444275,
+              "relative_rmse": 0.8937119245529175
+            },
+            "one_step_map_orbit_closure_relative_error": 0.2582109570503235,
+            "position_similarity_circulant_relative_error": 0.111953504383564,
+            "offset_kernel_fourier_power": [
+              0.5522730350494385,
+              0.22072651982307434,
+              0.12178435921669006,
+              0.10521607846021652
+            ]
+          },
+          "final": {
+            "token_following_affine": {
+              "r2": 0.9457372426986694,
+              "mean_cosine": 0.9769748449325562,
+              "relative_rmse": 0.2212151736021042
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9544941782951355,
+              "relative_rmse": 0.30379539728164673
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.12910139560699463,
+              "mean_cosine": 0.4645363986492157,
+              "relative_rmse": 0.8862326741218567
+            },
+            "one_step_map_orbit_closure_relative_error": 0.2524515986442566,
+            "position_similarity_circulant_relative_error": 0.10168682038784027,
+            "offset_kernel_fourier_power": [
+              0.5971799492835999,
+              0.19766615331172943,
+              0.10978171974420547,
+              0.09537222981452942
+            ]
+          }
+        }
+      },
+      "7": {
+        "accuracy": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "stages": {
+          "context_input": {
+            "token_following_affine": {
+              "r2": 1.0,
+              "mean_cosine": 1.0,
+              "relative_rmse": 1.090283603844e-05
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9797685146331787,
+              "relative_rmse": 0.20581762492656708
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.10204964876174927,
+              "mean_cosine": 0.4572639763355255,
+              "relative_rmse": 0.889481246471405
+            },
+            "one_step_map_orbit_closure_relative_error": 0.27567440271377563,
+            "position_similarity_circulant_relative_error": 0.15730811655521393,
+            "offset_kernel_fourier_power": [
+              0.5682026147842407,
+              0.19105933606624603,
+              0.12361715734004974,
+              0.11712093651294708
+            ]
+          },
+          "layer_1": {
+            "token_following_affine": {
+              "r2": 0.9824058413505554,
+              "mean_cosine": 0.9927346706390381,
+              "relative_rmse": 0.1273527443408966
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9656379222869873,
+              "relative_rmse": 0.38141220808029175
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.7643063068389893,
+              "mean_cosine": 0.8699215650558472,
+              "relative_rmse": 0.46612003445625305
+            },
+            "one_step_map_orbit_closure_relative_error": 0.2799747884273529,
+            "position_similarity_circulant_relative_error": 0.33200153708457947,
+            "offset_kernel_fourier_power": [
+              0.1657802164554596,
+              0.8148897290229797,
+              0.010520555078983307,
+              0.008809520862996578
+            ]
+          },
+          "layer_2": {
+            "token_following_affine": {
+              "r2": 0.9061107039451599,
+              "mean_cosine": 0.9669301509857178,
+              "relative_rmse": 0.29526764154434204
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.95195472240448,
+              "relative_rmse": 0.3656611144542694
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.17460376024246216,
+              "mean_cosine": 0.48054569959640503,
+              "relative_rmse": 0.8754653930664062
+            },
+            "one_step_map_orbit_closure_relative_error": 0.2956804931163788,
+            "position_similarity_circulant_relative_error": 0.1359754204750061,
+            "offset_kernel_fourier_power": [
+              0.5760996341705322,
+              0.23996774852275848,
+              0.10883434116840363,
+              0.07509826123714447
+            ]
+          },
+          "final": {
+            "token_following_affine": {
+              "r2": 0.9391195178031921,
+              "mean_cosine": 0.9731469750404358,
+              "relative_rmse": 0.23435024917125702
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9554109573364258,
+              "relative_rmse": 0.29989248514175415
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.1648579239845276,
+              "mean_cosine": 0.49755460023880005,
+              "relative_rmse": 0.8679738640785217
+            },
+            "one_step_map_orbit_closure_relative_error": 0.27163586020469666,
+            "position_similarity_circulant_relative_error": 0.12245697528123856,
+            "offset_kernel_fourier_power": [
+              0.6296867728233337,
+              0.21008239686489105,
+              0.09465720504522324,
+              0.06557363271713257
+            ]
+          }
+        }
+      },
+      "8": {
+        "accuracy": {
+          "token": 1.0,
+          "exact": 1.0
+        },
+        "stages": {
+          "context_input": {
+            "token_following_affine": {
+              "r2": 1.0,
+              "mean_cosine": 1.0,
+              "relative_rmse": 2.5123001250904053e-05
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9834491014480591,
+              "relative_rmse": 0.1900828778743744
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.11947053670883179,
+              "mean_cosine": 0.4720284938812256,
+              "relative_rmse": 0.8804953098297119
+            },
+            "one_step_map_orbit_closure_relative_error": 0.30623313784599304,
+            "position_similarity_circulant_relative_error": 0.16083627939224243,
+            "offset_kernel_fourier_power": [
+              0.5157216191291809,
+              0.18485264480113983,
+              0.10217054933309555,
+              0.10084086656570435,
+              0.09641430526971817
+            ]
+          },
+          "layer_1": {
+            "token_following_affine": {
+              "r2": 0.9838388562202454,
+              "mean_cosine": 0.9935135841369629,
+              "relative_rmse": 0.12018751353025436
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.971582293510437,
+              "relative_rmse": 0.3287125527858734
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.7664510011672974,
+              "mean_cosine": 0.8729888796806335,
+              "relative_rmse": 0.4568902850151062
+            },
+            "one_step_map_orbit_closure_relative_error": 0.25682690739631653,
+            "position_similarity_circulant_relative_error": 0.3143547773361206,
+            "offset_kernel_fourier_power": [
+              0.19179406762123108,
+              0.7854043841362,
+              0.008928817696869373,
+              0.006996253039687872,
+              0.006876511033624411
+            ]
+          },
+          "layer_2": {
+            "token_following_affine": {
+              "r2": 0.9145878553390503,
+              "mean_cosine": 0.9682122468948364,
+              "relative_rmse": 0.2806536555290222
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.956993818283081,
+              "relative_rmse": 0.3363415002822876
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.1880541443824768,
+              "mean_cosine": 0.5068612694740295,
+              "relative_rmse": 0.8653151988983154
+            },
+            "one_step_map_orbit_closure_relative_error": 0.30109670758247375,
+            "position_similarity_circulant_relative_error": 0.1493663340806961,
+            "offset_kernel_fourier_power": [
+              0.5763894319534302,
+              0.23529446125030518,
+              0.08992917835712433,
+              0.05504898354411125,
+              0.04333801567554474
+            ]
+          },
+          "final": {
+            "token_following_affine": {
+              "r2": 0.9372138977050781,
+              "mean_cosine": 0.9723896980285645,
+              "relative_rmse": 0.23638461530208588
+            },
+            "token_following_orthogonal": {
+              "mean_cosine": 0.9595426917076111,
+              "relative_rmse": 0.2859309911727905
+            },
+            "same_absolute_position_affine": {
+              "r2": 0.18624639511108398,
+              "mean_cosine": 0.5267397165298462,
+              "relative_rmse": 0.8510082960128784
+            },
+            "one_step_map_orbit_closure_relative_error": 0.2628023028373718,
+            "position_similarity_circulant_relative_error": 0.13354073464870453,
+            "offset_kernel_fourier_power": [
+              0.6388624310493469,
+              0.2009381800889969,
+              0.07655656337738037,
+              0.04677027836441994,
+              0.03687265142798424
+            ]
+          }
+        }
+      }
+    },
+    "aggregate": {}
+  }
+}

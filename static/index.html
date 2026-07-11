@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Smol Transformer Lab</title><link rel="stylesheet" href="/static/style.css"><link rel="stylesheet" href="/static/report.css">
+</head>
+<body>
+<main>
+  <header><div><p class="eyebrow">GPU PLAYGROUND</p><h1>Smol Transformer Lab</h1></div><span id="device" class="pill">connecting…</span></header>
+  <section class="grid">
+    <article class="panel controls">
+      <div class="panel-title"><h2>Train</h2><span id="status" class="status">idle</span></div>
+      <label>Model preset<select id="preset"><option value="custom">Custom</option></select><small id="preset-description" class="muted">Choose a measured architecture or edit fields manually.</small></label>
+      <label>Operation<select id="operation"></select></label>
+      <div class="form-grid">
+        <label>Maximum tokens<input id="seq_len" type="number" value="9" min="3" max="32"></label>
+        <label>Steps<input id="steps" type="number" value="1000" min="10"></label>
+        <label>Batch size<input id="batch_size" type="number" value="256" min="1"></label>
+        <label>Learning rate<input id="learning_rate" type="number" value="0.003" step="0.0005"></label>
+        <label>Model width<input id="d_model" type="number" value="16" min="8"></label>
+        <label>Heads<input id="n_heads" type="number" value="2" min="1"></label>
+        <label>Layers<input id="n_layers" type="number" value="2" min="1"></label>
+        <label>MLP width<input id="d_ff" type="number" value="16" min="8"></label>
+      </div>
+      <div class="actions"><button id="train">Start training</button><button id="stop" class="secondary">Stop</button></div>
+      <p id="message" class="message"></p>
+    </article>
+    <article class="panel chart-panel">
+      <div class="panel-title"><h2>Learning curve</h2><div><b id="loss">—</b> loss · <b id="accuracy">—</b> accuracy</div></div>
+      <canvas id="chart" width="900" height="370"></canvas>
+    </article>
+  </section>
+  <section class="panel checkpoint-panel">
+    <div class="panel-title"><h2>Checkpoints</h2><button id="refresh" class="text-button">Refresh</button></div>
+    <div id="checkpoints" class="checkpoint-list"><span class="muted">No checkpoints yet.</span></div>
+  </section>
+  <section class="panel findings">
+    <div class="panel-title"><div><p class="eyebrow">ARCHITECTURE SEARCH</p><h2>Where capability appears</h2></div><label>Task <select id="benchmark-operation"></select></label></div>
+    <p class="muted">Threshold = at least 99% exact accuracy on unseen, mixed-length sequences. Class minima interact and may come from different models.</p>
+    <div id="threshold-cards" class="threshold-cards"></div>
+    <div class="finding-grid">
+      <div><h3>Width × depth heatmap</h3><p class="muted">Best exact accuracy across tested head and MLP sizes.</p><div id="architecture-heatmap" class="architecture-heatmap"></div></div>
+      <div><h3>Accuracy vs parameter count</h3><p class="muted">Dashed line marks the 99% capability threshold.</p><canvas id="pareto-chart" width="600" height="360"></canvas></div>
+    </div>
+  </section>
+  <section class="panel explorer">
+    <div class="panel-title"><div><p class="eyebrow">INTERPRETABILITY</p><h2>Inside the model</h2></div></div>
+    <div class="inspect-bar"><label>Task<select id="inspect-operation"></select></label><input id="inspect-input" value="12345678=" maxlength="32" aria-label="Digits to inspect"><button id="inspect">Run & inspect</button><div class="prediction">Prediction <strong id="prediction">—</strong></div></div>
+    <div class="tabs"><button class="tab active" data-view="attention">Attention heads</button><button class="tab" data-view="mlp">MLP neurons</button></div>
+    <div class="explorer-controls"><label>Layer <select id="layer"></select></label><label id="head-label">Head <select id="head"></select></label><p id="explainer">Each cell shows how strongly an output position attends to an input position.</p></div>
+    <div id="visualization" class="visualization empty">Train or load a model, then inspect an example.</div>
+  </section>
+</main><script src="/static/app.js"></script>
+</body></html>
