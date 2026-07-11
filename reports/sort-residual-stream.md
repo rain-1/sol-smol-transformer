@@ -58,6 +58,12 @@ by token role:
   code, not a visible magnitude axis, matching the comparison-mechanism finding
   ([`sort-circuit-walkthrough.md`](sort-circuit-walkthrough.md)).
 
+An interactive 3D version (`python research/sort_scaling/build_stream3d.py` → a
+standalone `research/sort_scaling/stream_3d.html`, also published as an Artifact)
+plots the states in one shared PCA-3D frame with a stage toggle, so you can watch the
+role clusters sharpen from embedding to final: cluster separation (1 − within/total
+variance) rises from **0.58 at the embedding** to **0.75–0.83** once past block 0.
+
 ## Which component writes the answer?
 
 Direct logit attribution — projecting each component's residual write onto the
