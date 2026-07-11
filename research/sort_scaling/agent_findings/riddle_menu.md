@@ -15,7 +15,7 @@ function of *which keys are present*:
 - regress SEP residual on the present-key multi-hot indicator: **R² = 0.836**
 - model SEP as a sum of the present keys' token embeddings: **R² = 0.811**
 - as a sum of the L0 OV images of the present keys: R² = 0.754
-- mean cosine of each key's unembed row to its OV image: 0.76
+- mean cosine of each key's fitted per-key code `u_k` to its L0 OV image: 0.76
 
 So `SEP ≈ Σ_{k present} embed(k)` — a superposed bag of the present keys, not an
 ordered or rank-structured object.
