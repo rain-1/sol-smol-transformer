@@ -14,6 +14,7 @@ Three independent studies examine the tiny operation transformers from complemen
 - [Scaling sort, and what forces a routing circuit](sort-scaling.md) — counting vs. routing, why the encoder can't carry values, and the causal decoder's value-carrying induction head at length 30.
 - [Sort decoder: a component-by-component walkthrough](sort-circuit-walkthrough.md) — every attention head and both MLPs explained on one concrete example, with heatmaps.
 - [The sort decoder as an algorithm](sort-algorithm.md) — the decoder written as annotated pseudocode, each step backed by a specific interpretability result.
+- [Attention gallery: all heads, every seed](sort-seed-gallery.md) — every head of seed 42 (main) plus the five universality seeds on increasing / decreasing / random inputs, induction and sort heads highlighted.
 
 ## Joint picture
 
