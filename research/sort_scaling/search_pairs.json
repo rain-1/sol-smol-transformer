@@ -1,0 +1,99 @@
+{
+  "device": "cuda",
+  "task": "pairs",
+  "max_len": 30,
+  "alphabet": 20,
+  "steps": 10000,
+  "runs": [
+    {
+      "d_model": 32,
+      "n_heads": 2,
+      "n_layers": 1,
+      "d_ff": 64,
+      "parameters": 13290,
+      "seconds": 243.6,
+      "token_accuracy": 0.59095,
+      "exact_accuracy": 0.00664
+    },
+    {
+      "d_model": 32,
+      "n_heads": 2,
+      "n_layers": 2,
+      "d_ff": 64,
+      "parameters": 21834,
+      "seconds": 250.9,
+      "token_accuracy": 0.59627,
+      "exact_accuracy": 0.00801
+    },
+    {
+      "d_model": 32,
+      "n_heads": 2,
+      "n_layers": 3,
+      "d_ff": 64,
+      "parameters": 30378,
+      "seconds": 273.4,
+      "token_accuracy": 0.59781,
+      "exact_accuracy": 0.00596
+    },
+    {
+      "d_model": 32,
+      "n_heads": 2,
+      "n_layers": 4,
+      "d_ff": 64,
+      "parameters": 38922,
+      "seconds": 290.5,
+      "token_accuracy": 0.59291,
+      "exact_accuracy": 0.00771
+    },
+    {
+      "d_model": 48,
+      "n_heads": 2,
+      "n_layers": 2,
+      "d_ff": 96,
+      "parameters": 45018,
+      "seconds": 248.4,
+      "token_accuracy": 0.59895,
+      "exact_accuracy": 0.01025
+    },
+    {
+      "d_model": 48,
+      "n_heads": 2,
+      "n_layers": 3,
+      "d_ff": 96,
+      "parameters": 63978,
+      "seconds": 260.1,
+      "token_accuracy": 0.59325,
+      "exact_accuracy": 0.00908
+    },
+    {
+      "d_model": 48,
+      "n_heads": 2,
+      "n_layers": 4,
+      "d_ff": 96,
+      "parameters": 82938,
+      "seconds": 279.6,
+      "token_accuracy": 0.59897,
+      "exact_accuracy": 0.00879
+    },
+    {
+      "d_model": 64,
+      "n_heads": 4,
+      "n_layers": 3,
+      "d_ff": 128,
+      "parameters": 109866,
+      "seconds": 268.5,
+      "token_accuracy": 0.59789,
+      "exact_accuracy": 0.00889
+    },
+    {
+      "d_model": 64,
+      "n_heads": 4,
+      "n_layers": 4,
+      "d_ff": 128,
+      "parameters": 143338,
+      "seconds": 279.1,
+      "token_accuracy": 0.55174,
+      "exact_accuracy": 0.00361
+    }
+  ]
+}

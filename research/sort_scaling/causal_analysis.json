@@ -1,0 +1,52 @@
+{
+  "checkpoint": "research/sort_scaling/checkpoints/causal_pairs_L30.pt",
+  "config": {
+    "seq_len": 122,
+    "vocab_size": 73,
+    "d_model": 48,
+    "n_heads": 2,
+    "n_layers": 2,
+    "d_ff": 96
+  },
+  "length": 14,
+  "induction_scores": {
+    "L0H0": {
+      "induction_value_mass": 0.0003925725759472698,
+      "matching_key_mass": 0.06365897506475449
+    },
+    "L0H1": {
+      "induction_value_mass": 0.0009645793470554054,
+      "matching_key_mass": 0.054835833609104156
+    },
+    "L1H0": {
+      "induction_value_mass": 0.9917224049568176,
+      "matching_key_mass": 0.0005138405249454081
+    },
+    "L1H1": {
+      "induction_value_mass": 0.042272306978702545,
+      "matching_key_mass": 0.03929664567112923
+    }
+  },
+  "ablation": {
+    "baseline_gen_exact": 1.0,
+    "heads": {
+      "L0H0": {
+        "gen_exact": 0.0,
+        "drop": 1.0
+      },
+      "L0H1": {
+        "gen_exact": 0.00390625,
+        "drop": 0.99609375
+      },
+      "L1H0": {
+        "gen_exact": 0.0,
+        "drop": 1.0
+      },
+      "L1H1": {
+        "gen_exact": 0.0,
+        "drop": 1.0
+      }
+    }
+  },
+  "best_head": "L1H0"
+}

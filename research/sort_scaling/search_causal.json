@@ -1,0 +1,56 @@
+{
+  "max_pairs": 30,
+  "steps": 9000,
+  "runs": [
+    {
+      "d_model": 48,
+      "n_heads": 2,
+      "n_layers": 2,
+      "d_ff": 96,
+      "parameters": 50953,
+      "seconds": 234.2,
+      "tf_token": 0.99994,
+      "gen_exact": 0.99784
+    },
+    {
+      "d_model": 48,
+      "n_heads": 4,
+      "n_layers": 3,
+      "d_ff": 96,
+      "parameters": 69913,
+      "seconds": 249.1,
+      "tf_token": 0.99972,
+      "gen_exact": 0.99582
+    },
+    {
+      "d_model": 64,
+      "n_heads": 4,
+      "n_layers": 2,
+      "d_ff": 128,
+      "parameters": 84297,
+      "seconds": 228.1,
+      "tf_token": 0.99992,
+      "gen_exact": 0.9969
+    },
+    {
+      "d_model": 64,
+      "n_heads": 4,
+      "n_layers": 3,
+      "d_ff": 128,
+      "parameters": 117769,
+      "seconds": 256.5,
+      "tf_token": 0.99996,
+      "gen_exact": 0.99946
+    },
+    {
+      "d_model": 64,
+      "n_heads": 4,
+      "n_layers": 4,
+      "d_ff": 128,
+      "parameters": 151241,
+      "seconds": 291.0,
+      "tf_token": 1.0,
+      "gen_exact": 1.0
+    }
+  ]
+}

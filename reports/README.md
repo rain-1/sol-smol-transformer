@@ -11,6 +11,7 @@ Three independent studies examine the tiny operation transformers from complemen
 - [Multi-task causal control](multitask-causal-control.md) — token swaps, residual patching, corruptions, and embedding interpolation.
 - [Multi-task representation geometry](multitask-representations.md) — task probes, CKA, PCA, additive task vectors, and causal steering.
 - [Translation and rotation manifolds](translation-and-rotation-manifolds.md) — alphabet alignment, translation involution, and approximate cyclic equivariance.
+- [Scaling sort, and what forces a routing circuit](sort-scaling.md) — counting vs. routing, why the encoder can't carry values, and the causal decoder's value-carrying induction head at length 30.
 
 ## Joint picture
 
