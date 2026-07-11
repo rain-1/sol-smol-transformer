@@ -97,6 +97,42 @@ the output region around the key-emitting steps. Individual units are not cleanl
 monosemantic at this size, but the position structure matches the causal picture:
 L0 MLP works on the input/`SEP` setup, L1 MLP on the output-side refinement.
 
+## How the model actually compares keys and picks the next one
+
+The natural guess is a comparator: at each step the model scans the candidate keys,
+compares each against the last one, and points at the smallest that is larger. **That
+is not what happens.** At a key-emit step, attention to the individual input-key
+positions is essentially zero for every head (≤0.003 mass); L1H1 does carry a *faint*
+bias toward the smallest key just above the threshold (its input-key attention peaks
+at gap 0–3, and its argmax is the true next key ~30% of the time vs ~14% chance), but
+that signal is three orders of magnitude too small to be the selector.
+
+![The model does not scan candidates: input-key attention is ~0; key identity is a distributed code.](figures/walk_compare.png)
+
+Instead the mechanism is a **threshold sweep over a compressed set**:
+
+1. **Menu.** Layer 0 reads the input keys *at the `SEP` position* and compresses the
+   whole set of present keys into the `SEP` residual — a static superposition (key
+   identity lives in a distributed linear code; the best single embedding axis
+   correlates with key value at only r=0.46, so there is no clean 1-D magnitude
+   line). At every key step the query pulls this same `SEP` menu (0.9–0.99 mass onto
+   `SEP` for three of the four heads).
+2. **Moving threshold.** The one head that does *not* read `SEP`, L1H1, reads the
+   already-generated keys (0.94 mass) to recover the running maximum of what has been
+   emitted. This is the only part that changes from step to step.
+3. **Gated readout.** Because the `SEP` contribution is identical at every step, the
+   step-to-step difference is carried entirely by the threshold. The next key falls
+   out of a **threshold-gated linear readout of (`SEP` menu + threshold)** at the
+   L1-attention output — decodable at ~1.0, needing no MLP. As the threshold sweeps
+   upward across steps, the readout emits successively larger present keys: the sort.
+
+The causal patch in `sort-scaling.md` §7 confirms the gating directly — overwrite the
+last emitted key and the next prediction tracks *the new* running max (99.6%). So the
+comparison "`>`" is not an explicit compare-and-select over candidates; it is realised
+as a moving-threshold readout of a superposed set. The exact geometry that makes
+"menu + threshold → smallest present key above threshold" work is distributed and not
+reduced to a single interpretable direction — that is the open frontier of this study.
+
 ## Every component, one line each
 
 | component | job | evidence |
