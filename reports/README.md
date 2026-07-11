@@ -16,6 +16,7 @@ Three independent studies examine the tiny operation transformers from complemen
 - [The sort decoder as an algorithm](sort-algorithm.md) — the decoder written as annotated pseudocode, each step backed by a specific interpretability result.
 - [Attention gallery: all heads, every seed](sort-seed-gallery.md) — every head of seed 42 (main) plus the five universality seeds on increasing / decreasing / random inputs, induction and sort heads highlighted.
 - [The activation (residual) stream](sort-residual-stream.md) — effective dimensionality by depth, per-component writes, stream geometry, and direct logit attribution.
+- [Embedding geometry](sort-embeddings.md) — keys carry numeric order (for comparison), values are an arbitrary code (copied by identity); the positional table is an alternating slot code.
 
 ## Joint picture
 
