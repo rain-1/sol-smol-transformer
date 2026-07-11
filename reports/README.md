@@ -10,6 +10,7 @@ Three independent studies examine the tiny operation transformers from complemen
 - [Multi-task routing](multitask-routing.md) — task-selective heads, shared components, and operation-token redirection.
 - [Multi-task causal control](multitask-causal-control.md) — token swaps, residual patching, corruptions, and embedding interpolation.
 - [Multi-task representation geometry](multitask-representations.md) — task probes, CKA, PCA, additive task vectors, and causal steering.
+- [Translation and rotation manifolds](translation-and-rotation-manifolds.md) — alphabet alignment, translation involution, and approximate cyclic equivariance.
 
 ## Joint picture
 
@@ -25,6 +26,8 @@ The shared model reveals conditional modularity rather than four completely sepa
 
 Changing only the operation token fully reroutes the same digits to the destination algorithm. Residual patching localizes this control flow: patching the operation position works at the embedding stage, but after block 1 the relevant state has spread into digit positions. Mean task-vector steering partially changes algorithms, whereas embedding interpolation produces sharp transitions rather than smooth mixtures. Together these results suggest a compact early task-control signal followed by nonlinear, content-dependent execution.
 
+Translation adds a useful warning about embedding geometry: corresponding raw token embeddings (`1` and `a`, for example) are not similar, but their contextual final states are almost perfectly linearly aligned. The learned map is behaviorally involutive. For rotate-left, final token states follow the moved token much more closely than their absolute position and form approximate cyclic orbits; measurable closure and circulant-fit error rule out claiming exact equivariance.
+
 ## Scope and caution
 
 The attention and causal studies use one fixed seed on small preset models; the representation study uses three seeds but a larger common architecture. These are studies of learned solutions, not proofs that training must find the same circuits. Zero ablation is also an off-distribution intervention. The reports document these limitations and propose activation patching, resample ablation, and multi-seed circuit comparison as next steps.
@@ -38,6 +41,7 @@ python research/mlp/analyze.py --retrain
 python research/multitask_routing/analyze.py
 python research/multitask_causal/analyze.py
 python research/multitask_geometry/analyze.py
+python research/manifolds/analyze.py
 ```
 
 The checked-in research checkpoints make analysis reproducible without retraining where supported. Raw outputs live beside each script as `results.json`.
