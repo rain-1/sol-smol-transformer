@@ -36,6 +36,8 @@ The complete machine-readable measurements and checkpoints are in `research/caus
 | Sort | 0 | 98.7 pp | 98.7 pp |
 | Rotate left | 0 | 99.7 pp | 44.6 pp |
 
+![Grouped bar chart of exact-accuracy drop from removing each layer's attention versus its MLP, per task. Reverse's layer-1 MLP drop is zero.](figures/causal_components.png)
+
 Reverse's second-layer MLP is completely dispensable under this intervention, despite being present in the architecture. The useful nonlinear computation is concentrated in layer 0; both attention layers remain necessary. Copy shows the opposite of a simple “attention does the task” story: its MLP contribution is jointly essential, while eliminating attention still leaves 60.1% of sequences exactly correct.
 
 ## Attention heads
@@ -51,6 +53,8 @@ Every reverse head is individually important, but none alone accounts for the fu
 
 ## MLP neurons and distributed computation
 
+![Sorted single-neuron ablation effects for reverse and sort layer-0 MLPs, showing a few dominant neurons and a long tail.](figures/causal_neurons.png)
+
 The strongest single-neuron effects occur in reverse layer 0: neurons 14, 6, 3, 0, and 13 cause 68.4, 64.8, 60.3, 55.3, and 51.0 pp exact drops respectively. Sort likewise has two dominant neurons (layer 0 neurons 4 and 5: 86.1 and 83.8 pp).
 
 Copy is strikingly distributed: removing its entire MLP costs 100 pp, yet no individual neuron costs more than 0.1 pp. Rotate has a milder version: whole-MLP removal costs 44.6 pp, while its largest individual-neuron effect is 4.6 pp. These results demonstrate redundancy and interaction; single-neuron effects do not add linearly and cannot substitute for group ablations.
@@ -63,6 +67,8 @@ Copy is strikingly distributed: removing its entire MLP costs 100 pp, yet no ind
 | Reverse | 100.00% | **0.10%** | **0.63%** |
 | Sort | 98.90% | **0.10%** | 1.86% |
 | Rotate left | 100.00% | 23.68% | 5.69% |
+
+![Grouped bar chart comparing baseline digit-exact accuracy against accuracy after replacing the input `=` with `0` and after zeroing position embeddings, per task. Copy is robust to both; reverse and sort collapse.](figures/causal_delimiter.png)
 
 The delimiter is causally involved in all four models, not only used to emit the final `=`. Its strongest role is in reverse and sort. Because sequences are padded to a fixed width, the model also receives length information from the padding mask; nevertheless, replacing only the delimiter destroys almost all correct digit sequences for these tasks. A likely interpretation is that `=` serves as an attended anchor for the variable endpoint, though attention-pattern visualization or activation patching is needed to localize that information flow.
 

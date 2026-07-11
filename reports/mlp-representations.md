@@ -33,6 +33,8 @@ Mean held-out probe accuracy across three seeds:
 | Rotate left | 1 | 1.000 | 0.979 | 0.642 |
 | Rotate left | 2 | 1.000 | 0.800 | 0.391 |
 
+![Heatmap of mean linear-probe accuracy for digit, position, and length across task and layer. Reverse and rotate-left layer-1 activations make position almost perfectly decodable.](figures/mlp_probes.png)
+
 The majority baselines vary slightly by split; they are approximately 0.10 for digit, 0.16 for position, and 0.14–0.15 for length. Digit identity remains perfectly decodable, which is expected because token information persists through residual connections. More interestingly, reverse and rotation make absolute position almost perfectly recoverable in layer 1, with sequence length also substantially recoverable. Both are needed to map an input position to a length-dependent destination. Sort has weaker positional decoding, consistent with its output depending more on multiset/rank than source position. This is an architectural correlation, not proof that the probes recover the variables in the form used by the computation.
 
 Probe accuracy generally falls in layer 2. One plausible interpretation is that layer 1 constructs routing features and layer 2 consumes or mixes them; probing alone cannot establish that direction of causality.
@@ -51,6 +53,8 @@ Mean maximum eta-squared over neurons:
 | Sort | 2 | 0.774 | 0.398 | 0.040 |
 | Rotate left | 1 | 0.985 | 0.772 | 0.150 |
 | Rotate left | 2 | 0.521 | 0.253 | 0.038 |
+
+![Heatmap of maximum per-neuron eta-squared selectivity for digit, position, and length. Copy neurons are purely digit-selective; routing tasks develop position-selective layer-1 neurons.](figures/mlp_selectivity.png)
 
 Copy MLP neurons are extremely digit-selective and essentially not position- or length-selective. Reverse and rotate-left develop strongly position-selective first-layer neurons, while sort is intermediate. Length selectivity is weaker and less localized than position selectivity. The decline in maximum digit selectivity in layer 2 for the routing tasks suggests more mixed features, whereas copy preserves nearly pure digit tuning throughout.
 
@@ -71,9 +75,13 @@ Mean exact-sequence accuracy after ablating 10% of each MLP:
 | Rotate left | 1 | 0.979 | 0.940 |
 | Rotate left | 2 | 1.000 | 1.000 |
 
+![Grouped bar chart of exact accuracy after ablating the most-selective 10% of MLP neurons versus random 10%, per task and layer. Selective ablation is not consistently more damaging.](figures/mlp_ablation.png)
+
 The selected neurons are not consistently more causally important than random sets. For reverse and rotate-left, random layer-1 ablations are actually more damaging on average. This can happen because selectivity is not importance, the maximum-over-labels rule heavily favors digit-selective units, and weight/output magnitude is ignored. The main defensible conclusion is that performance is robust to removing the small selected sets and the computation is not localized by this criterion. A stronger follow-up would compare activation patching, mean rather than zero ablation, and output-weight-adjusted attribution.
 
 ## Representational similarity across tasks
+
+![Heatmap of cross-task final-residual linear CKA. Off-diagonal similarity is low; reverse and rotate-left are the most similar pair.](figures/mlp_cka.png)
 
 Mean final-residual linear CKA for matched inputs was low across different tasks: 0.046–0.114. Reverse and rotate-left were most similar (0.114), while copy and rotate-left were least similar (0.046). This is compatible with task-specific representational geometries and a modest commonality between two positional routing operations.
 

@@ -39,6 +39,8 @@ tested on the remaining strings. Averaged across lengths 2–8:
 | After block 1 | 0.9992 | 0.9997 | 0.0242 |
 | Final-normalized | 0.9993 | 0.9998 | 0.0209 |
 
+![Two bar charts across representation stages: held-out R² of the digit-to-letter affine map is near 1.0 at every stage, and relative RMSE stays small.](figures/manifold_translation.png)
+
 Before mapping, paired digit/letter states are not merged: their mean cosines
 are about -0.07 at input, -0.22 after the block, and -0.01 after final norm.
 Thus the model retains distinct alphabets but represents their contextual
@@ -68,6 +70,8 @@ learned rotation. Block 1 still carries substantial absolute-position
 information. By block 2 and final normalization, state is much better explained
 by following a token to its shifted location—consistent with a late routing
 stage.
+
+![Two panels: token-following affine R² stays high across depth while same-absolute-position R² peaks at block 1 then falls; the offset-kernel Fourier power concentrates in the DC and first harmonic.](figures/manifold_rotation.png)
 
 A stricter centered orthogonal fit has held-out cosine 0.913 / 0.947 / 0.950
 at blocks 1 / 2 / final, and relative error 0.462 / 0.377 / 0.318. Repeating

@@ -44,6 +44,8 @@ For a source and destination task applied to the same strings, destination-run a
 | Non-operation real positions | 1.56–16.60% | 6.25–100% | 99.22–100% |
 | All real positions | 99.22–100% | 99.22–100% | 99.22–100% |
 
+![Heatmap of mean destination-task exact accuracy when patching the operation position, digit positions, or all positions, at three depths. Operation-only patching works at the embedding but not after block 1, where digit-position patching takes over.](figures/causal_control_patching.png)
+
 The per-pair pattern sharpens the interpretation:
 
 - Reverse and rotate-left destination behavior is transferred by patching digit positions after layer 1 (85.74–100%). Copy is not: its two incoming transfers are only 6.25–13.09%. All three reach 100% after layer 2. This asymmetry suggests that reverse/rotate routing is established earlier, while producing the identity map still depends on late source-task state.
@@ -65,6 +67,8 @@ Linear interpolation between pairs of operation embeddings produces nonlinear, o
 | Reverse → rotate | 16.60% | 94.92% |
 | Sort → rotate | 12.11% | 73.05% |
 
+![Line chart of destination-task exact accuracy as the operation embedding is linearly interpolated toward the destination, for all six task pairs. The transitions are cliff-like rather than smooth.](figures/causal_control_interpolation.png)
+
 This argues against a simple linear “mixture of algorithms” along raw embedding chords. It is compatible with thresholded routing downstream, curved task regions, or interpolation leaving the learned operation-token manifold.
 
 ## Shared versus task-essential components
@@ -83,6 +87,8 @@ Single-component ablations reveal shared early machinery and task-selective late
 | L1H1 | 62.11% | 90.82% | 7.23% | 92.19% |
 | L1H2 | 89.26% | 80.66% | 73.44% | 84.18% |
 | L1H3 | 90.23% | 94.53% | 70.12% | 97.66% |
+
+![Heatmap of exact accuracy after single-component ablation, per component and task. Layer-0 MLP is broadly essential; layer-1 MLP is dispensable for reverse and rotate-left but not copy and sort.](figures/causal_control_ablation.png)
 
 Layer 0's MLP and head 3 are broadly essential across tasks. Head specialization is nevertheless clear: L0H0 is dispensable for copy but critical for rotate-left; L0H2 is especially critical for sort but nearly dispensable for rotate-left; L1H1 is especially critical for sort. Most strikingly, the entire layer-1 MLP is dispensable for reverse and rotate-left (both retain 99.22% exact) but important for copy and sort. This agrees with the patching evidence that the two routing tasks can largely finish after shared first-layer control/routing representations, whereas sort needs late nonlinear processing.
 

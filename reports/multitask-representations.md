@@ -24,6 +24,8 @@ block 2, and 99.6% after the final normalization. The train/test split is by
 underlying digit string, so paired versions of a held-out string cannot leak
 into training.
 
+![Three panels across network depth: task-probe accuracy jumps to 100% after block 1; PC1 variance fraction peaks at block 1; effective rank dips at block 1 then rises.](figures/geometry_probe_pca.png)
+
 Task-conditioned differences after block 1 are strikingly additive. Relative
 to copy, a single mean difference tensor accounts for 93.0% of reverse, 95.6%
 of sort, and 93.8% of rotate-left difference energy (averaged over lengths).
@@ -41,6 +43,8 @@ target task to copy activations changes many copy computations into that target:
 | Reverse | 80.7% | 55.7% | 4.7% | 48.3% |
 | Sort | 95.7% | 41.6% | 8.2% | 46.3% |
 | Rotate left | 90.0% | 43.6% | 4.3% | 43.3% |
+
+![Grouped bar chart of target-task exact accuracy from adding the mean task vector at block 1 versus block 2. Steering works from block 1 and fails from block 2.](figures/geometry_steering.png)
 
 The same intervention after block 2 is largely ineffective (mean target exact
 accuracy 2.3%, 10.5%, and 1.6%). This locates the useful approximately additive
@@ -63,6 +67,8 @@ rotate-left are mathematically the same operation and final CKA is 0.939. At
 lengths 3–8 their final CKA is only 0.105–0.297. It is therefore evidence of
 both true operation overlap at length 2 and some shared permutation machinery,
 not evidence that the model uses one identical circuit everywhere.
+
+![Line chart of linear CKA between task pairs across depth. Similarity is high at the embedding, stays high for copy–sort and reverse–rotate after block 1, then collapses after block 2.](figures/geometry_cka.png)
 
 PCA tells a compatible story. Across tasks, the first principal component
 explains 65.0% of example-level variance after block 1 and effective rank is

@@ -45,3 +45,17 @@ python research/manifolds/analyze.py
 ```
 
 The checked-in research checkpoints make analysis reproducible without retraining where supported. Raw outputs live beside each script as `results.json`.
+
+## Figures
+
+Every chart embedded in these reports is regenerated from the committed
+`results.json` files (attention heatmaps are captured live from the attention
+checkpoints) by a single script:
+
+```bash
+python research/figviz/make_figures.py
+```
+
+It writes PNGs into `reports/figures/`. Colours follow the shared palette in
+`research/figviz/style.py`: one fixed hue per task, a single-hue blue ramp for
+magnitude heatmaps.

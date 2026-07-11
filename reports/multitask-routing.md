@@ -23,6 +23,8 @@ Mean attention from non-prefix, non-padding queries to prefix position 0:
 | Sort | .100 | .284 | .767 | .100 | .120 | .407 | .016 | .027 |
 | Rotate left | .351 | .497 | .186 | .210 | .00050 | .005 | .002 | .004 |
 
+![Heatmap of mean attention from digit queries to the operation prefix, per task and head. Copy consults the prefix broadly; reverse and rotate-left layer-2 heads ignore it.](figures/routing_prefix_attention.png)
+
 Copy repeatedly consults the prefix in both layers. Sort particularly recruits L1H2 and L2H1. In contrast, nearly all layer-2 reverse and rotation heads ignore the operation position. Since those tasks still execute correctly, the natural interpretation is that layer 1 has already written the control state into content-position residuals before layer 2 performs routing. Attention weights are observational and should not themselves be interpreted as causal effects.
 
 Task-conditioned residual means are separated after both layers. Normalized pairwise distances after layer 1 range from 0.291 (reverse versus rotate) to 1.370 (copy versus rotate); after layer 2 they remain 0.303–0.475. MLP means become especially distinct in layer 2 (up to 0.724), except reverse versus rotation (0.106). Thus reverse and rotate share a similar late MLP state despite implementing different positional routes.
@@ -41,6 +43,8 @@ The following values are drops in exact accuracy from ablating one head's output
 | L2H1 | .544 | .206 | **.987** | .080 |
 | L2H2 | .102 | .290 | .474 | .233 |
 | L2H3 | .086 | .074 | .476 | .037 |
+
+![Heatmap of exact-accuracy drop from ablating each head, per task. Layer-1 heads show sharp task specialization; layer-2 heads are more shared.](figures/routing_head_ablation.png)
 
 Layer 1 has the clearest specialization:
 
