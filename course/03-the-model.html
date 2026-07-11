@@ -64,8 +64,13 @@ from its input position to wherever its key lands. That is genuine routing.</p>
 
 <p>We fed this to the same encoder architecture — and it <strong>could not learn it</strong>.
 Not with more layers, more width, more training, or easier variants. It reliably sorted
-the keys (by counting) and left the values at chance. We will unpack the deep reason in
-Lesson 5, but the one-line version is a preview of a theme:</p>
+the keys (by counting) and left the values at chance. The reason is worth stating,
+because it is the crux: counting sort produces the sorted keys <em>without ever
+computing where each key came from</em> — it builds no pointer from an output slot back
+to a source position. So the key computation hands the value channel nothing to route
+with, and the bidirectional encoder would have to conjure a data-dependent gather from
+scratch. It never manages to; it stays stuck sorting keys. The one-line version is a
+preview of a theme:</p>
 
 <div class="keypoint">Some tasks are unlearnable for one architecture and trivial for
 another. The architecture decides which algorithms are even reachable.</div>

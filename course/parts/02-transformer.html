@@ -38,6 +38,44 @@ x = x + attention_layer_1(x)
 x = x + mlp_layer_1(x)
 logits = unembed(x)                         <span class="tok-c"># read out a prediction</span></code></pre>
 
+<svg class="diagram" viewBox="0 0 620 486" role="img" aria-label="Diagram of the residual stream: embeddings feed a shared per-position vector; each attention and MLP block reads from it and adds its output back; an unembedding reads out next-token logits.">
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path class="ah" d="M0,0 L6.5,3 L0,6 Z"/></marker>
+    <marker id="aha" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path class="ah-a" d="M0,0 L6.5,3 L0,6 Z"/></marker>
+  </defs>
+  <line class="spine" x1="175" y1="70" x2="175" y2="416"/>
+  <text class="lab" x="150" y="243" text-anchor="middle" transform="rotate(-90 150 243)">the residual stream · 48-dim · one per position</text>
+  <rect class="box" x="55" y="24" width="240" height="34" rx="8"/>
+  <text x="175" y="45" text-anchor="middle">token + position embedding</text>
+  <line class="flow" x1="175" y1="58" x2="175" y2="70" marker-end="url(#aha)"/>
+  <text class="lab" x="258" y="99" text-anchor="middle">reads &amp; adds back</text>
+  <!-- attn0 -->
+  <circle class="add" cx="175" cy="112" r="9"/><path class="flow" d="M170,112 h10 M175,107 v10"/>
+  <line class="con" x1="326" y1="112" x2="187" y2="112" marker-end="url(#ah)"/>
+  <rect class="box-a" x="326" y="95" width="210" height="34" rx="8"/><text x="431" y="116" text-anchor="middle">Attention — Layer 0</text>
+  <!-- mlp0 -->
+  <circle class="add" cx="175" cy="168" r="9"/><path class="flow" d="M170,168 h10 M175,163 v10"/>
+  <line class="con" x1="326" y1="168" x2="187" y2="168" marker-end="url(#ah)"/>
+  <rect class="box" x="326" y="151" width="210" height="34" rx="8"/><text x="431" y="172" text-anchor="middle">MLP — Layer 0</text>
+  <!-- attn1 -->
+  <circle class="add" cx="175" cy="252" r="9"/><path class="flow" d="M170,252 h10 M175,247 v10"/>
+  <line class="con" x1="326" y1="252" x2="187" y2="252" marker-end="url(#ah)"/>
+  <rect class="box-a" x="326" y="235" width="210" height="34" rx="8"/><text x="431" y="256" text-anchor="middle">Attention — Layer 1</text>
+  <!-- mlp1 -->
+  <circle class="add" cx="175" cy="308" r="9"/><path class="flow" d="M170,308 h10 M175,303 v10"/>
+  <line class="con" x1="326" y1="308" x2="187" y2="308" marker-end="url(#ah)"/>
+  <rect class="box" x="326" y="291" width="210" height="34" rx="8"/><text x="431" y="312" text-anchor="middle">MLP — Layer 1</text>
+  <!-- block brackets -->
+  <path class="brk" d="M548,95 h9 v90 h-9"/><text class="lab" x="583" y="143" text-anchor="middle" transform="rotate(90 583 143)">Block 0</text>
+  <path class="brk" d="M548,235 h9 v90 h-9"/><text class="lab" x="583" y="283" text-anchor="middle" transform="rotate(90 583 283)">Block 1</text>
+  <!-- unembed -->
+  <line class="flow" x1="175" y1="416" x2="175" y2="430" marker-end="url(#aha)"/>
+  <rect class="box" x="45" y="430" width="260" height="34" rx="8"/><text x="175" y="451" text-anchor="middle">unembedding → next-token logits</text>
+</svg>
+<p class="figcap-inline">The whole machine at one position. The blue spine is the
+residual stream; each block <b>reads</b> it and <b>adds</b> its output back at the
+&oplus; nodes; the final vector is read out into a prediction.</p>
+
 <div class="aside why">
   <span class="lab">Why this matters for us</span>
   <p>Because every component adds into the same stream, we can ask of any vector in
@@ -64,6 +102,31 @@ the looking, and a <em>key</em> position being looked at):</p>
   value vectors, using the attention weights, and adds the result into its own
   residual stream.</li>
 </ul>
+
+<svg class="diagram" viewBox="0 0 620 272" role="img" aria-label="Diagram of one attention head: a query position scores every earlier position, a softmax turns the scores into weights (drawn as line thickness), and the head brings back a weighted average of those positions' value vectors into the query's residual stream.">
+  <defs>
+    <marker id="ah2" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path class="ah-a" d="M0,0 L6.5,3 L0,6 Z"/></marker>
+  </defs>
+  <text class="lab" x="310" y="24" text-anchor="middle">earlier positions — each offers a key and a value</text>
+  <rect class="box" x="72"  y="36" width="96" height="42" rx="8"/><text x="120" y="62" text-anchor="middle">pos 1</text>
+  <rect class="box" x="202" y="36" width="96" height="42" rx="8"/><text x="250" y="62" text-anchor="middle">pos 2</text>
+  <rect class="box" x="332" y="36" width="96" height="42" rx="8"/><text x="380" y="62" text-anchor="middle">pos 3</text>
+  <rect class="box" x="462" y="36" width="96" height="42" rx="8"/><text x="510" y="62" text-anchor="middle">pos 4</text>
+  <line class="flow" style="stroke-width:1.2" x1="310" y1="188" x2="120" y2="80"/>
+  <line class="flow" style="stroke-width:6"   x1="310" y1="188" x2="250" y2="80"/>
+  <line class="flow" style="stroke-width:2.6" x1="310" y1="188" x2="380" y2="80"/>
+  <line class="flow" style="stroke-width:1.2" x1="310" y1="188" x2="510" y2="80"/>
+  <text class="lab" x="310" y="132" text-anchor="middle">1 · WHERE to look — score = query·key, softmax → weights (line thickness)</text>
+  <rect class="box-a" x="248" y="188" width="124" height="42" rx="8"/><text x="310" y="214" text-anchor="middle">query</text>
+  <line class="flow" x1="372" y1="209" x2="474" y2="209" marker-end="url(#ah2)"/>
+  <text class="lab" x="486" y="205" text-anchor="start">2 · WHAT to bring:</text>
+  <text class="lab" x="486" y="220" text-anchor="start">weighted average of</text>
+  <text class="lab" x="486" y="234" text-anchor="start">values → the stream</text>
+</svg>
+<p class="figcap-inline">One head. The query scores every earlier position and a softmax
+turns those scores into attention weights (thicker line = more attention); the head then
+adds a weighted average of those positions' <em>value</em> vectors into the query's
+stream.</p>
 
 <div class="aside def">
   <span class="lab">Definition</span>

@@ -19,7 +19,7 @@ LESSONS = [
     ("04-attention", "4 · Reading attention",
      "Attention heatmaps and finding an induction head", "Techniques"),
     ("05-causal", "5 · Causal methods",
-     "Ablation, activation patching, and logit attribution", "Techniques"),
+     "Ablation, patching, logit attribution, and reading the weights", "Techniques"),
     ("06-probing-geometry", "6 · Probing & geometry",
      "Linear probes, PCA, effective dimensionality, embeddings", "Techniques"),
     ("07-the-algorithm", "7 · The algorithm it learned",

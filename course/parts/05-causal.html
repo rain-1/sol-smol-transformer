@@ -1,7 +1,8 @@
 <p>Observation generates hypotheses; <strong>intervention</strong> tests them. In this
 lesson we stop looking and start breaking things — deleting components, swapping
-activations, and tracing where the answer is written. This is the heart of mechanistic
-interpretability.</p>
+activations, tracing where the answer is written — and then, at the end, reading the
+circuit straight out of the weights. This is the heart of mechanistic interpretability:
+the point where a picture becomes a proof.</p>
 
 <h2>Ablation: delete it and see what breaks</h2>
 <p>The simplest causal experiment is <strong>ablation</strong>: remove a component's
@@ -93,15 +94,65 @@ attribution</strong>.</p>
   copy both happen in attention.</figcaption>
 </figure>
 
-<div class="aside result">
-  <span class="lab">What causal methods bought us</span>
-  <p>We upgraded three guesses to facts: L1H0 is <em>causally</em> the value head, L1H1
-  the key head, and L0H0 the single precursor the value head depends on; the next-key
-  rule really is "smallest present key above a threshold" (the staircase); and layer-1
-  attention is what writes the output. Every one of these could have come out
-  otherwise — that is what makes them evidence.</p>
+<h2>Reading the weights directly</h2>
+<p>One last kind of evidence, and it is different from everything above: it needs no
+intervention and no forward pass at all. The attention head's behaviour is baked into
+its weight matrices, and we can read them. This is the most rigorous evidence there is —
+it is a statement about the model's fixed structure, not about a possibly-off-distribution
+experiment.</p>
+
+<div class="aside def">
+  <span class="lab">Definition</span>
+  <p>A head's <strong>OV circuit</strong> (output–value) determines <em>what it writes</em>
+  once it has decided where to look; its <strong>QK circuit</strong> (query–key)
+  determines <em>where it looks</em>. Both are products of weight matrices, so we can
+  multiply them out into "token space" and ask what they do to specific tokens —
+  purely from the weights.</p>
 </div>
 
-<p>Ablation and patching tell us <em>where</em> computation happens and <em>what</em>
-it depends on. To learn what the activations actually <em>represent</em>, we need one
-more family of tools: probing and geometry.</p>
+<p>Take L1H0's OV circuit and push it all the way from input value tokens to output
+logits. If the head copies, this map should be a diagonal: attending to value X should
+raise the logit of X and nothing else.</p>
+
+<figure>
+  <img src="figures/agent_qkov_ov_copy.png" alt="L1H0's OV circuit is a diagonal copy matrix over the value tokens.">
+  <figcaption>L1H0's OV map over the value tokens is a clean <b>copy matrix</b> — the
+  diagonal is bright (argmax-correct 100%, chance 5%). Whatever value the head attends
+  to, it writes to the output. Restricted to key tokens it is <em>not</em> a copy, so the
+  copying is specific to values. This is the value carry, proven from the weights.</figcaption>
+</figure>
+
+<p>Now the QK circuit — the matching. A naive guess is that the head matches the query
+key against input keys by identity. Read straight from the embeddings, it does
+<em>not</em> (0% — it is not a simple induction head on raw tokens). But feed the
+precursor L0H0's output into the key side, and the match becomes perfect:</p>
+
+<figure>
+  <img src="figures/agent_qkov_qk_composed.png" alt="Composing L0H0's output makes L1H0's QK a perfect key-identity matcher.">
+  <figcaption>L1H0's key-matching, once L0H0's output is composed in: a clean diagonal
+  (100% identity match). The induction match runs <em>through</em> the precursor — the
+  weight-level twin of the ablation result that removing L0H0 collapses the head. Two
+  independent methods, same circuit.</figcaption>
+</figure>
+
+<div class="aside caveat">
+  <span class="lab">The approximation</span>
+  <p>To read weights in token space we "fold" LayerNorm — keep its fixed rescaling and
+  drop the data-dependent part. This is standard, and exact for the argmax structure we
+  care about, but it is why these are called weight-<em>space</em> arguments: they show
+  the circuit is <em>built</em>, complementing the activation experiments that show it
+  <em>fires</em>.</p>
+</div>
+
+<div class="aside result">
+  <span class="lab">What causal &amp; weight methods bought us</span>
+  <p>We upgraded guesses to facts by three independent routes. <strong>Ablation:</strong>
+  L1H0 is the value head, L1H1 the key head, L0H0 the single precursor. <strong>Patching:</strong>
+  the next-key rule really is "smallest present key above a threshold" (the staircase).
+  <strong>Weights:</strong> L1H0's OV is literally a copy matrix and its match runs
+  through L0H0. When intervention and weight analysis agree, you can trust the mechanism.</p>
+</div>
+
+<p>These methods tell us <em>where</em> computation happens, <em>what</em> it depends
+on, and how the circuit is <em>built</em>. To learn what the activations actually
+<em>represent</em>, we need one more family of tools: probing and geometry.</p>
