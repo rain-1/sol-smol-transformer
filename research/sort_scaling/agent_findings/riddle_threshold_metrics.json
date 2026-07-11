@@ -1,0 +1,97 @@
+{
+  "checkpoint": "causal_pairs_L30.pt",
+  "length": 12,
+  "part1_threshold_direction": {
+    "raw": {
+      "r2_full": 0.9128346391694107,
+      "rmse_full": 3.965859915625704,
+      "r2_noH1": 0.8878491732442982,
+      "r2_noH0": 0.9281661656858162,
+      "r2_L1H1_contrib_alone": 0.9157372948057725
+    },
+    "q_controlled": {
+      "r2_full": 0.5351426286066345,
+      "r2_noH1": 0.3170366362144065,
+      "r2_noH0": 0.571583279530596,
+      "r2_L1H1_contrib_alone": 0.5817801274751846
+    },
+    "content_decode_dim_r2": {
+      "1": 0.009500626229819065,
+      "2": 0.012147619224034734,
+      "3": 0.018695273434429893,
+      "5": 0.03002379418183887,
+      "10": 0.07949613992280158,
+      "48": 0.5522112987001377
+    },
+    "note": "raw R2 is inflated by q (theta monotone in rank slot); q_controlled is the genuine content threshold. Decode R2 != causal steerability (see part 2)."
+  },
+  "part2_sweep": {
+    "menu": [
+      6,
+      9,
+      12,
+      13,
+      23,
+      28,
+      31,
+      36,
+      39,
+      45,
+      47,
+      48
+    ],
+    "match_token_q1": 1.0,
+    "match_token_q1_mlp_off": 0.9791666666666666,
+    "agg_token_q1_match_40menus": 0.9948106341287672,
+    "xmid_transplant_reproduces_tokenpatch": 1.0,
+    "xmid_1d_probe_axis_injection_match": 0.0625,
+    "xmid_traj_var_frac_top6": [
+      0.2275853157043457,
+      0.13973531126976013,
+      0.12935882806777954,
+      0.11851191520690918,
+      0.08129356056451797,
+      0.05551266670227051
+    ],
+    "xmid_topk_pc_reconstruction_match": {
+      "1": 0.3125,
+      "2": 0.5833333333333334,
+      "3": 0.7083333333333334,
+      "5": 0.8958333333333334,
+      "8": 1.0,
+      "12": 1.0
+    }
+  },
+  "part3_readout_form": {
+    "r2_all_keys": 0.10500550270080566,
+    "r2_present_keys": 0.37365472316741943,
+    "argmax_fit_vs_true": 0.9997632575757576,
+    "argmax_true_vs_ideal": 0.9997632575757576,
+    "argmax_fit_vs_ideal": 1.0,
+    "mean_logit_present_above": 7.345700740814209,
+    "mean_logit_present_below": -0.6922616958618164,
+    "mean_winner_margin": 15.4408540725708,
+    "coefs_allkeys": {
+      "bias": 0.0,
+      "present": 0.012461155652999878,
+      "above": 0.002000749111175537,
+      "present*above": 0.008236516267061234,
+      "gap_above": -0.21326057612895966,
+      "present*gap_above": 0.14434754848480225,
+      "gap_below": -0.29745912551879883,
+      "present*gap_below": 0.020193859934806824
+    },
+    "coefs_present": {
+      "above": 16.7410831451416,
+      "gap_above": -0.6648072004318237,
+      "gap_below": -0.19804176688194275
+    }
+  },
+  "part4_linear_vs_mlp": {
+    "lens_acc_xmid_before_mlp": 0.9725379347801208,
+    "lens_acc_xout_after_mlp": 0.9997633099555969,
+    "key_acc_baseline": 0.9997633099555969,
+    "key_acc_L1_mlp_off": 0.9725379347801208,
+    "key_acc_L0_mlp_off": 0.1983901560306549
+  }
+}

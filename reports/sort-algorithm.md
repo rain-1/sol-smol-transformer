@@ -62,9 +62,9 @@ for q in range(n):
 | # | Step | Mechanism | Evidence | Confidence |
 |---|------|-----------|----------|------------|
 | 1 | bind value↔key | L0H0/L0H1 are previous-token / precursor heads: each input value slot is stamped with its key's identity | input-region diagonal attention; the induction match is a perfect key-identity match only once L0H0's OV is composed into L1H0's K (+12.7σ, head-specific) | **weight-level** (`agent_qkov`) |
-| 2 | build the menu at SEP | L0 heads read all input keys **at the SEP position**; the L0 MLP compresses the present-key set into the SEP residual | L0H0 puts 0.996 of its SEP-position attention on input keys; per-key presence decodable from SEP ≈0.81; ablating the **L0 MLP** collapses key accuracy 1.00→0.20 (value ~unchanged) | **causal + probe** (`walkthrough`, `agent_sorthead`) |
+| 2 | build the candidate set | L0 heads read all input keys **at the SEP position**; the L0 MLP builds a present-key representation. `SEP` holds a readable copy of the set (≈ a sum of key embeddings) but the causally-used identities are **distributed** across the block-0 residual, not a swappable `SEP` object | `SEP` residual predicted by the present-key multi-hot at R²≈0.84 (≈emb-sum R²0.81); ablating the **L0 MLP** collapses key accuracy 1.00→0.20; but transplanting `SEP` alone installs a new set only at 0.08 (full block-0 transplant 1.0) | **causal + probe** (`walkthrough`, `agent_sorthead`, `riddle_menu`, `riddle_causal`) |
 | 3 | threshold = running max | L1H1 reads the already-emitted keys with recency weighting → the running maximum | L1H1 key-step attention: 0.94 on generated output, geometric recency (0.61 on the last key); causal patch: next key tracks the running **max** (99.6%), not the last key (0.4%) | **causal** (`agent_sorthead`) |
-| 4 | pick smallest present key > threshold | Threshold-gated **linear readout** of (SEP menu + threshold) at the L1-attention output — *not* a pairwise comparison or a scan over candidates | next key decodable ~1.0 at the L1-attn output (0.10 before), with **no MLP** needed (L1-MLP ablation costs 0.03); attention to individual input keys at key steps ≈0; key identity is a distributed linear code (best single axis r=0.46) | **localized; geometry open** (`compare`) |
+| 4 | pick smallest present key > threshold | A **threshold-gated linear readout**: the logit for a present key is a **cliff** (~+8 logits for `k > θ`) plus a **linear penalty** growing with `k − θ`, so the argmax is the smallest present key just above θ. Not a scan or pairwise comparison | swept-θ staircase matches the ideal rule at 1.000 (0.995 over 40 menus); measured cliff ≈8 logits (6.2 above θ vs −2.0 at/below), peak at the smallest `k > θ`; readout is linear at the L1-attn output (97.3% pre-MLP); decision lives in a ~12–16-dim subspace | **confirmed; readout characterized** (`compare`, `riddle_threshold`, `riddle_causal`) |
 | 5 | copy the paired value | L1H0 induction head matches the just-emitted key `sk_q` back to its input occurrence and copies the following value | argmax on the matching input value 100% of the time; L1H0's OV is a diagonal value-**copy** matrix (100% argmax); value decodable/aligned to its unembedding at block 1 (cos 0.77) | **weight-level** (`agent_qkov`, `deep_interp`, `agent_geometry`) |
 | 6 | (no termination) | EOS is outside the training loss mask, so it is never learned; the model keeps trying to sort | P(emit EOS at the final slot)=0.000 at every length; it emits the max key id instead | **confirmed** (`agent_failure`) |
 
@@ -76,12 +76,15 @@ for q in range(n):
 - **Solid, causally:** the sort *rule* (step 3, running-max threshold) and the roles
   of each component (SEP scratchpad, L0-MLP menu builder). Sort-by-generation (no
   global rank) is seed-universal.
-- **The one open block (step 4):** we know *where* the next-key decision is made (a
-  linear readout of the static SEP menu plus the moving threshold, at the
-  L1-attention output) and *what* it is not (not a scan, not a pairwise comparator).
-  The exact geometry that turns "menu + threshold → smallest present key above
-  threshold" into a linear readout is not yet reduced to interpretable directions.
-  <!-- RIDDLE: menu/threshold/causal agents in progress -->
+- **Step 4, now resolved (the former open block):** the `>` is realised as a
+  threshold-gated **linear readout** at the L1-attention output — a logit cliff at
+  `k > θ` plus a linear penalty in `(k − θ)`, whose argmax is the smallest present
+  key just above θ. A swept-threshold experiment traces the exact sorting staircase
+  from a single fixed menu (match 1.000). Two honest residual caveats: the threshold
+  is a distributed ~5–8-dim code (steerable only in that many dims, not one), and the
+  candidate set is distributed across the block-0 residual rather than a swappable
+  `SEP` object — so the decision occupies a ~12–16-dim linear subspace, not a handful
+  of named directions. The *mechanism* is pinned; a fully minimal basis for it is not.
 
 ## Caveats
 

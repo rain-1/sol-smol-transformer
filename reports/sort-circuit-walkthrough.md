@@ -126,12 +126,33 @@ Instead the mechanism is a **threshold sweep over a compressed set**:
    L1-attention output — decodable at ~1.0, needing no MLP. As the threshold sweeps
    upward across steps, the readout emits successively larger present keys: the sort.
 
-The causal patch in `sort-scaling.md` §7 confirms the gating directly — overwrite the
-last emitted key and the next prediction tracks *the new* running max (99.6%). So the
-comparison "`>`" is not an explicit compare-and-select over candidates; it is realised
-as a moving-threshold readout of a superposed set. The exact geometry that makes
-"menu + threshold → smallest present key above threshold" work is distributed and not
-reduced to a single interpretable direction — that is the open frontier of this study.
+Three follow-up analyses (`research/sort_scaling/agent_riddle_*.py`) pin the readout
+down:
+
+- **The staircase (decisive).** Holding one sequence's menu fixed and injecting a
+  swept threshold θ (by patching the emitted key), the selected next key traces the
+  ideal "smallest present key > θ" staircase exactly — match **1.000** on one menu,
+  **0.995** over 40 random menus. One static menu emits every present key in order as
+  θ sweeps. ![One static menu emits a staircase of keys as the threshold sweeps.](figures/riddle_threshold_sweep.png)
+- **The comparison, as a formula.** The `>` is a **logit cliff plus a linear
+  penalty**. For present keys the readout is `logit(k) ≈ +8 if k > θ, then decaying
+  ~linearly with (k − θ)`; measured on the model's own logits: mean logit 6.2 above θ
+  vs −2.0 at/below (an ~8-logit cliff), peaking at the smallest key *strictly* above θ
+  (the just-emitted key at k = θ is suppressed). The argmax is therefore the smallest
+  present key just above the threshold — no pairwise comparison, no candidate scan.
+- **It is linear and pre-MLP.** Reading the model's unembedding off the L1-attention
+  output (before the L1 MLP) already selects the right key 97.3% of the time; the L1
+  MLP is minor cleanup, the L0 MLP is what builds the representation upstream.
+
+Two honest refinements from the causal tests. The threshold is **not** a single
+additive direction: it is a distributed ~5–8-dim code (a naive 1-D θ-axis injection
+fails at 0.06 even though patching the real captured activation transfers at 1.0 —
+*decodability ≠ steerability*). And the candidate "menu" is **not** a swappable object
+localised in `SEP`: `SEP` holds a readable copy of the present-key set (≈ a sum of key
+embeddings, R²≈0.84) and is a necessary read-hub, but transplanting the `SEP` residual
+alone does not install a new key set (0.08 vs 1.0 for a full block-0 transplant) — the
+identities the readout consumes are distributed across the block-0 residual. The whole
+next-key decision lives in a ~12–16-dim linear subspace of the L1-attention output.
 
 ## Every component, one line each
 
