@@ -23,8 +23,10 @@ ordered or rank-structured object.
 ## 2. Presence code — decodable per key (CONFIRMED)
 
 "Is key k present?" decodes from the SEP residual at mean **AUC 0.88 / acc 0.885**
-(xout), 0.895 (xmid), roughly uniform across the 50 key ids. The set membership is
-linearly readable but lossy (a superposition of ~12 keys in 48 dims).
+(xout), 0.895 (xmid). It is **non-uniform**: keys 0–19 decode at AUC ~0.965 but
+mid-range keys 20–29 fall to ~0.75 (most collided in the additive superposition of
+~12 keys in 48 dims). The thresholded readout in §3 collapses in exactly that
+mid-range, tracking the presence-code degradation.
 
 ## 3. Thresholded readout — linear-in-principle, lossy from SEP (NEW, nuanced)
 
@@ -50,14 +52,20 @@ Two conclusions:
   not read solely from SEP — SEP holds a readable-but-lossy copy and is a necessary
   read-hub, not a sufficient standalone menu.
 
-## 4. What the L0 MLP adds at SEP (UNCERTAIN / small)
+## 4. The L0 MLP does NOT build the menu (REFUTED) — yet is causally essential (open)
 
-The SEP representation is similar before vs after the L0 MLP (presence 0.895 xmid vs
-0.885 xout; linear thresholded readout 0.656 vs 0.621), so at the SEP position itself
-the L0 MLP only mildly sharpens the set/menu code. This does **not** contradict the
-L0 MLP being causally essential for keys overall (ablation collapses key accuracy
-1.00→0.20, see `walkthrough`): its necessity is for building the representation the
-downstream readout consumes, not for making the set decodable at SEP.
+Before vs after the L0 MLP at SEP, every menu metric is flat-to-slightly-**worse**:
+composition R² 0.836→0.835, presence AUC 0.895→0.880, thresholded readout 0.618→0.597.
+So the present-key set is assembled by the L0 **attention** (already present in
+`x_mid`); the L0 MLP does not refine or build it.
+
+This creates a genuine puzzle: ablating the L0 MLP collapses key accuracy 1.00→0.20
+(`walkthrough`), so it is causally essential for key selection — but not by improving
+the linearly-decodable set code at SEP. Either its output is a nonlinear transform
+consumed by the downstream readout that a linear probe cannot see as added
+set-information, or it acts at non-SEP positions. **Its precise key-role is not
+localized** by this analysis — a residual open question. (Earlier framing that "the
+L0 MLP prepares the menu" is withdrawn.)
 
 ## Status
 

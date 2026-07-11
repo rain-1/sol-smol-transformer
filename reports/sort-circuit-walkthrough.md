@@ -45,15 +45,18 @@ column** — the vertical stripe. That is not idleness: at the `SEP` position it
 (the `SEP` row) L0H0 reaches back and reads the input **keys** (0.996 of its mass in
 aggregate), depositing the set of present keys into the `SEP` residual.
 
-**The L0 MLP is the key-sorting workhorse.** Ablating it collapses key-output
+**The L0 MLP is causally essential for keys.** Ablating it collapses key-output
 accuracy from 1.00 to **0.20**, while value accuracy barely moves (0.97):
 
 ![Ablating each MLP: L0 MLP is critical for keys, L1 MLP is minor, neither matters much for values.](figures/walk_mlp_ablation.png)
 
-The L0 MLP consumes what L0 attention gathered at `SEP` and turns the raw
-present-key set into the form the next layer can compare against. Its effect is
-*upstream* — it prepares information at the `SEP` position, so the sorted key is not
-yet readable at the query position right after it (see the probe below).
+Its effect is *upstream* — the sorted key is not yet readable at the query position
+right after it (see the probe below). But note a genuine puzzle, sharpened by the
+menu analysis (`agent_findings/riddle_menu.md`): the present-key set at `SEP` is
+actually assembled by the L0 *attention* and is **not** improved by the L0 MLP
+(presence and thresholded-readout decodability are flat-to-slightly-worse across it).
+So the L0 MLP is causally essential for keys yet does not build the menu — what
+exactly it contributes to key selection is not localized by this study.
 
 ## Layer 1 — the computation
 
@@ -160,7 +163,7 @@ next-key decision lives in a ~12–16-dim linear subspace of the L1-attention ou
 |---|---|---|
 | **L0H0** | previous-token precursor; at `SEP` reads the input keys | input diagonal + `SEP` column; 0.996 SEP-mass on keys |
 | **L0H1** | second precursor (key side) | similar diagonal / `SEP` pattern |
-| **L0 MLP** | prepares the candidate key-set gathered at `SEP` | ablation: key 1.00→0.20, value ~unchanged |
+| **L0 MLP** | causally essential for keys (ablation: key 1.00→0.20, value ~unchanged) but does *not* build the `SEP` menu (L0 attention does) — its precise key-role is unlocalized | ablation vs flat menu decodability across it |
 | **L1H1** | sort head: reads emitted keys → running max threshold | recency staircase over output keys |
 | **L1H0** | induction head: copies the matching input value | one bright value cell per value-emit row (the permutation) |
 | **L1 MLP** | minor output-side cleanup | ablation: key −0.03, value −0.06 |
