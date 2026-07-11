@@ -185,14 +185,176 @@ L1H0  induction head: matches key identity, copies the value (values)
 L1H1  sort head: reads generated output, emits the next key   (keys)
 ```
 
+## 7. Deeper mechanisms
+
+A second round of focused analyses (each in `research/sort_scaling/agent_*.py`,
+findings under `research/sort_scaling/agent_findings/`) reverse-engineers the two
+channels down to the weights and to causal rules.
+
+### The value copy, at the weight level
+
+Reading the induction head's OV circuit directly from the weights — the effective
+map `W_U · Wo · Wv · W_E` over the value tokens (LayerNorm gain folded, data-dependent
+scale dropped) — shows it is a **clean copy matrix**: attending to value token X
+raises the logit of X and nothing else (argmax-correct 20/20, chance 1/20; diagonal
+z = 3.5). Restricted to key tokens it is *not* a copy (2%, chance), so the copy is
+specific to the value subspace it transports. (Independently reproduced.)
+
+![L1H0's OV circuit over value tokens is a diagonal copy matrix.](figures/agent_qkov_ov_copy.png)
+
+The match is the subtle part. L1H0's QK over **raw** key embeddings does *not* match
+on identity (0% argmax) — so it is not a naive induction head. But the key identity
+does not arrive at an input value position as a raw embedding: the L0H0 precursor
+writes it there. Feeding L0H0's OV output through L1H0's key map, `Wk1·g·Wo0·Wv0·E`,
+turns the QK into a **perfect identity matcher** (50/50, chance 1/50; z = 4.0), and
+the L0H0→L1H0 K-composition is +12.7σ above random while the sibling head L0H1 sits
+at baseline. This is the weight-level counterpart of the ablation result (removing
+L0H0 collapses the induction score 0.99→0.10): the induction match runs *through*
+L0H0.
+
+![L1H0's QK becomes a perfect key-identity matcher once L0H0's output is composed in.](figures/agent_qkov_qk_composed.png)
+
+### The sort rule, causally
+
+The sort head **L1H1** chooses the next key by reading the already-emitted keys with
+sharp **recency weighting** (0.61 mass on the most recent, geometric tail over the
+last few) — a soft "max-so-far."
+
+![L1H1 attends to recently emitted keys with geometric decay; L1H0 does not.](figures/agent_sort_attn_profiles.png)
+
+A causal patch pins the exact rule. Overwrite the last-emitted key at a key step and
+read the prediction: for order-preserving substitutions the model emits *the smallest
+input key greater than the substituted key* (99.8%). But for **non-monotone** (OOD)
+substitutions — where the patched key is smaller than an earlier emitted key — the
+"greater than the last key" rule matches only 0.4%, while *"smallest input key
+greater than the running **max** of all emitted keys"* matches 99.6%. So the
+operative threshold is the running maximum, which merely coincides with the last key
+during normal monotone output.
+
+![Causal dissociation: the threshold is the running max of emitted keys, not the last one.](figures/agent_sort_causal_rule.png)
+
+This also resolves the earlier "L0 heads park on `SEP` yet are essential" puzzle:
+`SEP` is a **scratchpad**, not just a sink. At the `SEP` position L0H0 reads the
+input keys (0.996 of its attention) and writes the present-key *set* into the `SEP`
+residual (per-key presence linearly decodable at 0.81); the upper layer reads that
+summary forward to find the min-greater key. The whole sort answer is computed in
+layer 1 — the next key is linearly decodable from the block-1 residual at **1.00**
+(0.10 before).
+
+### What the residual stream represents (refined)
+
+The model never builds a global ordering — key *rank* stays undecodable (~0.35). But
+a **local, content-bearing frontier** does form: probing the key-emit residual for
+the last-emitted and next key, after partialling out the position/rank-slot confound
+(without which the probe is inflated to ~0.97 by the monotone prior), the genuine
+content signal rises from ~0 at the input to **~0.67 at block 1**.
+
+![After controlling for position, the last/next key content becomes decodable at block 1.](figures/agent_geom_frontier.png)
+
+Two independent analyses agree that this frontier and the value copy are both written
+at block 1: the value becomes decodable (and geometrically aligned to its unembedding
+direction, cosine 0.77) exactly there, and so does the next key. Layer 0 gathers
+(keys→`SEP`, key-identity→value positions); layer 1 decides and copies.
+
+### The circuit is universal across seeds
+
+Everything above is one trained model, the caveat every prior report in this repo
+flags. Training five fresh seeds of the minimal 48-wide/2-head/2-layer decoder
+(seeds 0, 1, 2, 3, 7; max 16 pairs; all solved, generation-exact 0.957–1.000)
+shows the decomposition is not a single-seed accident. **Every seed independently
+develops the same functional circuit:**
+
+| seed | induction head | induction score | single precursor | precursor ablation drop | global key-rank probe |
+|---|---|---:|---|---:|---:|
+| 0 | L1H0 | 0.92 | L0H0 | 0.84 | 0.36 |
+| 1 | L1H0 | 0.88 | L0H1 | 0.80 | 0.35 |
+| 2 | L1H1 | 0.96 | L0H1 | 0.87 | 0.31 |
+| 3 | L1H1 | 0.95 | L0H0 | 0.87 | 0.35 |
+| 7 | L1H1 | 0.94 | L0H1 | 0.86 | 0.34 |
+
+What recurs in **all five** seeds (aligning heads by behaviour, since the indices
+permute — the induction head is L1H0 in two seeds and L1H1 in three):
+
+- **A key-identity induction head** whose attention argmax lands on the matching
+  input value 100% of the time (induction score >0.88).
+- **Exactly one layer-0 precursor** whose removal collapses that induction score to
+  ~0.08 while every other head moves it ≤0.11 — the single most robust motif.
+- **Sort-by-generation:** the global key rank is never linearly decodable (0.31–0.36
+  at every depth), so no seed precomputes an ordering.
+- The `SEP` scratchpad/sink (~0.92 mass).
+
+Two honest qualifications keep this from being an over-claim. The *value carry* is
+usually one head but not always: seed 7 splits it across two layer-1 heads (removing
+either alone drops value accuracy little; removing both collapses it). And the
+**clean single "sort head" is not universal** — in the main model L1H1 owned key
+selection, but in the fresh seeds key-output ablation is diffuse across heads; only
+the *functional role* (a head reading the generated output to pick the next key)
+recurs, in different heads at variable strength (0.27–0.87). So the value/induction
+channel and its precursor are a sharp, reproducible circuit; the key channel is
+reproducible as a *strategy* (generation-time comparison) but not as a single tidy
+head.
+
+![Across five seeds: a value/induction head, a single precursor whose ablation collapses it, and the sort-by-generation signature all recur.](figures/agent_seeds_summary.png)
+
+![Per-seed head-role matrix (heads not aligned): the induction score always concentrates on one head, but which index it is permutes across seeds.](figures/agent_seeds_head_matrix.png)
+
+### Failure modes
+
+**Errors are rare, late, and inherited from the key channel.** Autoregressive
+sequence-exact stays ≈1.0 and dips only to 0.995 at the maximum trained length;
+per-token errors concentrate both at the longest lengths and at the **late output
+ranks** (the frontier is hardest once many keys have been emitted). Decomposing the
+value errors, 362/372 coincide with the key at that rank also being wrong (a
+cascade from a sorting slip) versus only 10 "pure" induction failures — the value
+copy is almost never the culprit; mistakes originate in key selection and the
+induction head faithfully carries whatever key was chosen.
+
+![Errors concentrate at the max length and at late output ranks; value error tracks key error.](figures/agent_fail_error_localization.png)
+
+**`SEP` is causally a key-sorting scratchpad.** Blocking every query's attention to
+the `SEP` position crashes key-output accuracy from 1.00 to 0.24 at length 30 while
+value accuracy is untouched (0.998) — direct causal confirmation that the input-key
+set L0 deposits at `SEP` is what the sort reads, and that the value channel does not
+use it.
+
+![Blocking attention to SEP crashes key accuracy but not value accuracy.](figures/agent_fail_sep_sink.png)
+
+**Duplicate keys break it (identity-based routing).** Keys were distinct in
+training; introducing ties is out of distribution and the induction match — which
+points at a *unique* key — has nothing to resolve. Sequence-exact falls to zero with
+even two tied keys, and per-token value accuracy decays monotonically with the number
+of ties (the key-token accuracy recovers only in the degenerate all-tied limit, where
+every order is "sorted").
+
+![With tied keys the induction attention has no unique target and accuracy collapses.](figures/agent_fail_duplicate_keys.png)
+
+**The model never learned to terminate.** The training loss mask scores only the
+sorted-pair tokens (`SEP` through the last value), leaving the `EOS` marker
+unscored, so it receives no gradient. Confirmed behaviourally — the probability of
+emitting `EOS` at the final slot is 0.000 at every length; the model instead emits
+the largest key id (49) and tries to keep sorting. This is why generation-exact is
+scored on the sorted pairs, not on termination — and a "count of pairs remaining" is
+only weakly decodable (~0.33), so the model has no strong internal length counter.
+
 ## Verdict
 
 Scaled sort does **not** discover a comparison sorting network. Over a bounded
 alphabet it discovers counting sort. When the task is changed to force routing, a
-*causal* model solves it with a two-part circuit — sort-by-generation for the keys
-and an **induction head** that associatively copies each value from its source
-pair — while the bidirectional encoder cannot learn it at all. The architectural
-prior (causal vs. bidirectional) decides which algorithm is reachable.
+*causal* model solves it with a two-channel circuit — **sort-by-generation** for the
+keys (emit the smallest input key above the running max of what has been emitted,
+computed in layer 1 from a present-key set that layer 0 stashes at `SEP`) and a
+**key-identity induction head** that copies each value from its source pair (a
+weight-level copy matrix whose match runs through a single layer-0 precursor) — while
+the bidirectional encoder cannot learn it at all. The architectural prior (causal vs.
+bidirectional) decides which algorithm is reachable.
+
+The value channel is a sharp, **seed-universal** circuit (one induction head + one
+precursor + sort-by-generation recur across five seeds, with head indices permuted);
+the key channel recurs as a *strategy* rather than a single tidy head. The model
+carries a local content frontier but never a global rank, its errors come almost
+entirely from the key channel and concentrate at late ranks, it is brittle to
+duplicate keys, and it never learned to stop — all consistent with the same
+generate-and-compare mechanism.
 
 ## Reproduce
 
@@ -207,7 +369,13 @@ python research/sort_scaling/causal_sort.py --config 48 2 2 96 --max-len 30 --st
 python research/sort_scaling/causal_analyze.py --length 14
 # 5. full-circuit deep dive (head roles, sort mechanism, probes, robustness)
 python research/sort_scaling/deep_interp.py --length 12
+# 6. deeper studies (§7): weight-level QK/OV, sort rule, geometry, multi-seed, failure modes
+python research/sort_scaling/agent_qkov.py
+python research/sort_scaling/agent_sorthead.py
+python research/sort_scaling/agent_geometry.py
+python research/sort_scaling/agent_seeds.py --all      # trains 5 seeds
+python research/sort_scaling/agent_failure.py
 ```
 
 Raw search results and metrics are the `search*.json` / `*_analysis.json` files in
-`research/sort_scaling/`.
+`research/sort_scaling/`; the §7 studies write to `research/sort_scaling/agent_findings/`.
