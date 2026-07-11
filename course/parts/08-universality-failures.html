@@ -1,0 +1,81 @@
+<p>We have a beautiful story about one trained network. The professional's next question
+is skeptical: <em>is any of it real, or did we just narrate the accidents of one random
+seed?</em> This lesson is about testing generality, finding where the model breaks, and
+being honest about what we got wrong.</p>
+
+<h2>Universality: train it again, from scratch</h2>
+<p>Every result so far came from one model. Weights depend on the random seed used to
+initialize training, so the single most important robustness check is to train
+<em>fresh</em> models with different seeds and ask which findings recur.</p>
+
+<figure>
+  <img src="figures/agent_seeds_summary.png" alt="Circuit features across five fresh seeds.">
+  <figcaption>Five independently trained seeds. <b>What recurs in all five:</b> a
+  value/induction head (with a single precursor whose removal collapses it) and
+  sort-by-generation (global rank never decodable). <b>What does not:</b> a clean single
+  sort head — in the fresh seeds, key selection is smeared across heads.</figcaption>
+</figure>
+
+<div class="aside result">
+  <span class="lab">Stated by role, not by address</span>
+  <p>Across seeds the head <em>indices</em> permute — the induction head is "L1H0" in
+  some seeds and "L1H1" in others. So findings must be stated by <em>role</em> ("the
+  induction head"), never by address ("L1H0"). The value channel is a sharp, universal
+  circuit; the key channel is a universal <em>strategy</em> (generate-and-threshold)
+  but not one tidy head.</p>
+</div>
+
+<p>A gallery of all heads across all seeds and several inputs makes this concrete —
+the value/induction head keeps its sharp shape in every seed while the sort work stays
+diffuse. (See <code>reports/sort-seed-gallery.md</code>.)</p>
+
+<h2>Where it breaks</h2>
+<p>Understanding failure is understanding mechanism. Because the value channel routes by
+matching a <em>unique</em> key identity, it should break if keys are not unique. Feed it
+<strong>duplicate keys</strong> (never seen in training) and it does:</p>
+
+<figure>
+  <img src="figures/agent_fail_duplicate_keys.png" alt="Accuracy collapses as keys are duplicated.">
+  <figcaption>With tied keys, the induction head has no unique target to point at, and
+  accuracy collapses. The failure is not random — it is exactly what the identity-matching
+  mechanism predicts. A good mechanistic account predicts its own failure modes.</figcaption>
+</figure>
+
+<p>Two more, briefly: the model's rare errors are almost all <em>inherited from key
+selection</em> — the value copy is nearly perfect, so a wrong value usually means a wrong
+key upstream. And, as noted earlier, it never learned to stop (<code>EOS</code> was
+outside the training loss), so left to run it just keeps sorting.</p>
+
+<h2>What we got wrong</h2>
+<p>Real analysis is iterative, and several confident claims were later overturned by
+better experiments. Keeping these in is not modesty for its own sake — the <em>ways</em>
+a mechanistic claim can be wrong are exactly the pitfalls you are learning to avoid.</p>
+
+<ul>
+  <li><strong>"The layer-0 MLP builds the key menu."</strong> Ablation showed it is
+  essential for keys, so we said it builds the menu. Then a probe showed the menu is
+  already assembled by layer-0 <em>attention</em> and the MLP does not improve it.
+  Necessary ≠ the thing you assumed it does. <span class="mono">(withdrawn)</span></li>
+  <li><strong>"The block-1 MLP does the comparison."</strong> A coarse probe located
+  the answer "after block 1," which we read as the MLP. A finer probe separated
+  attention from MLP and showed the readout is essentially linear at the
+  <em>attention</em> output. <span class="mono">(corrected)</span></li>
+  <li><strong>"The menu lives in <code>SEP</code>."</strong> It is <em>readable</em> at
+  <code>SEP</code>, but patching the <code>SEP</code> vector between inputs did not
+  transplant the key set — the identities are distributed. Decodable is not the same as
+  localized. <span class="mono">(refined)</span></li>
+  <li><strong>"Keys form a clean order axis."</strong> One CV protocol said r&nbsp;=&nbsp;0.79,
+  a stricter one said 0.30. Both are true of different questions (interpolation vs
+  extrapolation); the honest answer is a distributed order code. <span class="mono">(reconciled)</span></li>
+</ul>
+
+<div class="aside caveat">
+  <span class="lab">The meta-lesson</span>
+  <p>Notice the shape of every correction: a real but <em>coarse</em> signal was
+  over-interpreted, and a sharper experiment split it apart. "Necessary" got read as
+  "does X"; "decodable" got read as "used" or "localized." These two conflations are the
+  most common way interpretability goes wrong. Guard against them.</p>
+</div>
+
+<p>With generality tested, failures mapped, and mistakes owned, we can step back and say
+what all of this <em>means</em>.</p>

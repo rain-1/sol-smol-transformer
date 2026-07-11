@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2 — How a transformer works — Tiny Transformer Interpretability</title>
+<link rel="stylesheet" href="course.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<button id="menu" aria-label="Toggle navigation">☰ Contents</button>
+<div class="shell">
+<nav class="side" id="side">
+  <a class="brand" href="index.html">Tiny Transformer<span>Interpretability, from scratch</span></a>
+  <ol class="toc"><li class="grp">Start</li><li class=""><a href="index.html">Overview</a></li><li class="grp">Foundations</li><li class=""><a href="01-what-is-interp.html">1 · What is interpretability?</a></li><li class="cur"><a href="02-transformer.html">2 · How a transformer works</a></li><li class=""><a href="03-the-model.html">3 · Our model and its task</a></li><li class="grp">Techniques</li><li class=""><a href="04-attention.html">4 · Reading attention</a></li><li class=""><a href="05-causal.html">5 · Causal methods</a></li><li class=""><a href="06-probing-geometry.html">6 · Probing & geometry</a></li><li class="grp">Synthesis</li><li class=""><a href="07-the-algorithm.html">7 · The algorithm it learned</a></li><li class=""><a href="08-universality-failures.html">8 · Universality, failures & honesty</a></li><li class=""><a href="09-conclusion.html">9 · What you learned</a></li></ol>
+  <p class="sidenote">A hands-on course built around one 51k-parameter model that
+  learned to sort.</p>
+</nav>
+<main id="main">
+<article>
+<header class="lh">
+  <p class="part">Foundations</p>
+  <h1>How a transformer works</h1>
+  <p class="sub">Tokens, the residual stream, attention, and MLPs — from scratch</p>
+</header>
+<p>To take a transformer apart, you need a clear picture of what it is. This lesson
+builds one from the ground up. We will keep it concrete by using the exact sizes of
+the model in this course wherever it helps.</p>
+
+<h2>Everything is a sequence of vectors</h2>
+<p>A transformer reads a sequence of <strong>tokens</strong> (here, symbols like the
+key <code>k17</code> or the value <code>v5</code>) and, at every position, produces a
+prediction for what token comes next. Internally it never works with the symbols
+directly — it works with <em>vectors</em>.</p>
+
+<div class="aside def">
+  <span class="lab">Definition</span>
+  <p><strong>Token</strong> — one atomic symbol from a fixed vocabulary.
+  <strong>Embedding</strong> — a lookup table with one learned vector per vocabulary
+  token. Turning a token into its vector is the model's first act. In our model each
+  vector has <strong>48</strong> numbers (we say the model is "48-dimensional",
+  <code>d_model = 48</code>).</p>
+</div>
+
+<p>Position matters ("first" versus "third" is different), but a lookup table only
+knows <em>which</em> token, not <em>where</em> it is. So the model also has a
+<strong>positional embedding</strong>: one learned vector per slot in the sequence,
+added to the token vector. The starting vector at each position is therefore
+<code>token_vector + position_vector</code>.</p>
+
+<h2>The residual stream: a shared workspace</h2>
+<p>Here is the single most important idea for interpretability. Those per-position
+vectors form the <strong>residual stream</strong>: a running 48-dimensional vector at
+each position that every part of the network reads from and writes to. Components do
+not pass messages to each other directly; they all <em>add</em> their output into this
+shared stream.</p>
+
+<pre><code><span class="tok-c"># the residual stream at one position, flowing down through the network</span>
+x = token_embedding + position_embedding   <span class="tok-c"># the starting vector</span>
+x = x + attention_layer_0(x)                <span class="tok-c"># each component ADDS its output</span>
+x = x + mlp_layer_0(x)
+x = x + attention_layer_1(x)
+x = x + mlp_layer_1(x)
+logits = unembed(x)                         <span class="tok-c"># read out a prediction</span></code></pre>
+
+<div class="aside why">
+  <span class="lab">Why this matters for us</span>
+  <p>Because every component adds into the same stream, we can ask of any vector in
+  it: <em>which components put what here, and what does it encode?</em> Most of our
+  techniques — probing, logit attribution, patching — are ways of interrogating this
+  stream. Keep this diagram in your head for the whole course.</p>
+</div>
+
+<h2>Attention: moving information between positions</h2>
+<p>So far each position is processed on its own. <strong>Attention</strong> is the
+only operation that lets positions share information — it lets the vector at one
+position pull in information from the vectors at <em>other</em> positions.</p>
+
+<p>It works in two halves. For each pair of positions (a <em>query</em> position doing
+the looking, and a <em>key</em> position being looked at):</p>
+<ul>
+  <li><strong>Where to look (the QK circuit).</strong> The query produces a "query
+  vector," each other position produces a "key vector," and their dot product is a
+  score: how relevant is that position to this one? Softmax turns the scores across
+  all positions into <em>attention weights</em> that sum to 1 — a spotlight that can
+  be sharp (all on one position) or diffuse.</li>
+  <li><strong>What to bring back (the OV circuit).</strong> Each position also
+  produces a "value vector." The query position takes a weighted average of those
+  value vectors, using the attention weights, and adds the result into its own
+  residual stream.</li>
+</ul>
+
+<div class="aside def">
+  <span class="lab">Definition</span>
+  <p>An attention <strong>head</strong> is one independent copy of this
+  where-to-look / what-to-bring-back machinery. A layer can have several heads running
+  in parallel, each free to specialize. Our model has <strong>2 heads per layer</strong>.
+  "L1H0" means layer&nbsp;1, head&nbsp;0.</p>
+</div>
+
+<p>Two facts we will lean on constantly: attention weights are easy to
+<em>visualize</em> (they are just a grid of numbers per head — the "heatmaps" of the
+next lesson), and the QK and OV circuits are <em>separable</em> — a head decides
+<em>where</em> to look independently of <em>what</em> it copies.</p>
+
+<h2>The MLP: per-position computation</h2>
+<p>After attention has moved information around, each position is processed on its own
+again by a <strong>multi-layer perceptron (MLP)</strong>: a small two-step function
+(expand to a wider hidden layer, apply a non-linearity, project back) that transforms
+the vector in place and adds the result to the stream. Attention mixes across
+positions; the MLP computes within a position. Ours has a hidden width of 96.</p>
+
+<h2>Depth, and reading out an answer</h2>
+<p>A <strong>layer</strong> (or "block") is one attention step followed by one MLP
+step. Stacking layers lets later computation build on earlier computation — all
+through the shared stream. Our model has just <strong>2 layers</strong>, which is part
+of why we can understand it completely.</p>
+
+<p>At the end, the final residual vector at a position is multiplied by an
+<strong>unembedding</strong> matrix to produce a <strong>logit</strong> (a score) for
+every vocabulary token; softmax turns those into probabilities, and the highest one is
+the model's prediction for the next token.</p>
+
+<div class="aside def">
+  <span class="lab">Definition</span>
+  <p><strong>Autoregressive generation</strong> — the model predicts one token, appends
+  it to the sequence, and predicts the next, and so on. A <strong>causal mask</strong>
+  enforces the rule that a position may only attend to <em>earlier</em> positions,
+  never later ones — you cannot peek at the future you are trying to predict. Whether a
+  model is causal turns out to be decisive for our task, as we will see.</p>
+</div>
+
+<p>One small but important detail: before attention and before the unembedding, the
+stream passes through <strong>LayerNorm</strong>, which rescales each vector to a
+standard size. It mostly does not change <em>which</em> direction a vector points, so
+for interpretation we can often treat it as a fixed scaling and look through it — a
+trick we will use when we attribute logits to components.</p>
+
+<div class="aside result">
+  <span class="lab">You now know enough</span>
+  <p>Tokens become vectors; the residual stream is a shared per-position workspace;
+  attention moves information between positions in a visible, separable way; MLPs
+  compute within a position; and the final vector is read out into a next-token
+  prediction. That is the whole machine. Next we meet the specific one we will
+  dissect.</p>
+</div>
+
+<nav class="pn"><a class="prev" href="01-what-is-interp.html"><span>← Previous</span>1 · What is interpretability?</a><a class="next" href="03-the-model.html"><span>Next →</span>3 · Our model and its task</a></nav>
+</article>
+<footer class="foot">Part of the <a href="index.html">Tiny Transformer Interpretability</a>
+course · reproducible from <code>research/sort_scaling/</code> ·
+built by generating <code>course/build.py</code>.</footer>
+</main>
+</div>
+<script>
+document.getElementById('menu').addEventListener('click',()=>document.getElementById('side').classList.toggle('open'));
+</script>
+</body>
+</html>

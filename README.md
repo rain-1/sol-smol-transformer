@@ -44,3 +44,5 @@ These are empirical results for one seed and training budget, not lower-bound pr
 The webpage's **Where capability appears** report summarizes class-wise 99% thresholds, a width-by-depth accuracy heatmap, and a log-scale accuracy/parameter Pareto chart.
 
 Mechanistic interpretability studies covering attention circuits, causal ablations, probes, MLP selectivity, and cross-task representation similarity are indexed in [`reports/README.md`](reports/README.md).
+
+A beginner interpretability **course** built around the length-30 pair-sort decoder — teaching transformers from scratch and every analysis step with full explanation — is in [`course/`](course/README.md) (open `course/index.html`).

@@ -1,0 +1,87 @@
+<p>Attention is the most <em>visible</em> part of a transformer: for each head, the
+weights are just a grid of numbers you can look at directly. That makes attention
+heatmaps the natural first tool. This lesson teaches you to read them — and to find a
+famous circuit hiding in ours.</p>
+
+<h2>How to read a heatmap</h2>
+<p>A heatmap shows one head on one input. Each <strong>row is a query</strong> (a
+position doing the looking) and each <strong>column is a key</strong> (a position being
+looked at); a dark cell means that query put a lot of attention on that key. Because of
+the causal mask, everything is lower-triangular — a position can only look backward.</p>
+
+<p>Here are all four heads of our model on a single example, sorting the five keys
+<code>k12 k3 k41 k27 k8</code>:</p>
+
+<figure>
+  <img src="figures/walk_heads.png" alt="Attention heatmaps of all four heads on one example.">
+  <figcaption>Every head on one length-5 example. Rows are output-and-input positions,
+  columns are what each attends to. <b>L0H0 / L0H1</b> run down the diagonal in the
+  input then pile onto the <code>SEP</code> column; <b>L1H1</b> spreads over the emitted
+  keys; <b>L1H0</b> is sharp and scattered — hold that thought.</figcaption>
+</figure>
+
+<p>Already you can see the heads are <em>specialized</em> — they do not all look the
+same. Two of them (L0H0, L0H1) show a clean diagonal in the input region: each token
+attending to itself or its neighbour. One (L1H1) is broad. And one (L1H0) is sharp but
+its bright cells are scattered in a way that looks almost random. That last one is the
+interesting one.</p>
+
+<h2>Finding the induction head</h2>
+<p>Zoom in on L1H0 and organize the picture. At each step where the model is about to
+emit a <em>value</em>, where does that position look?</p>
+
+<figure>
+  <img src="figures/sort_causal_induction_heatmap.png" alt="L1H0 attention: each output value row attends to the matching input value.">
+  <figcaption>The value-carrying head, one row per output position. Every "→&nbsp;emit
+  <b>vX</b>" row lights up exactly the input <b>vX</b> token — the head copies each
+  value from its source pair. The cells are scattered only because the input is
+  unsorted: <b>that scatter is the sorting permutation.</b></figcaption>
+</figure>
+
+<p>Now it is not random at all. When the model is about to emit the value that belongs
+with the smallest-key pair, this head attends precisely to <em>that value in the
+input</em>, and copies it. It is doing the routing the whole task is about.</p>
+
+<div class="aside def">
+  <span class="lab">Definition</span>
+  <p>An <strong>induction head</strong> is a head that implements "find X earlier in the
+  context, and copy what came after it." Induction heads were first discovered in
+  language models (where they drive in-context learning) and are the circuit
+  transformers form most readily. Here, X is a key and "what came after it" is that
+  key's value.</p>
+</div>
+
+<p>This is a genuine, named circuit — the kind of thing interpretability exists to
+find — and we found it by looking at pictures and then organizing them by what the
+model was doing at each step. That reorganization ("sort the columns by rank") is a
+recurring trick: raw attention can look like noise until you view it in the right
+coordinates.</p>
+
+<h2>Heads have jobs: an atlas</h2>
+<p>Reading all four heads together, a division of labour emerges. It helps to name each
+head by its <em>role</em>:</p>
+<ul>
+  <li><strong>L1H0 — the induction / value head:</strong> copies each value from its
+  source pair (the scattered-but-sharp map above).</li>
+  <li><strong>L1H1 — the sort head:</strong> reads the keys emitted <em>so far</em> to
+  decide the next one (the broad map).</li>
+  <li><strong>L0H0, L0H1 — precursor heads:</strong> the diagonal "previous-token"
+  heads whose output the later heads build on. They also do something clever at the
+  <code>SEP</code> token that we will only fully understand with causal tools.</li>
+</ul>
+
+<h2>The catch: attention is only a suggestion</h2>
+<p>Everything above is <em>observation</em>. A heatmap tells you where a head looks —
+but not whether that looking actually <em>matters</em> for the output, nor what the
+head does with what it reads. A head can attend somewhere and have its contribution
+cancelled downstream; another can look diffuse but be essential.</p>
+
+<div class="aside caveat">
+  <span class="lab">Why we cannot stop here</span>
+  <p>Attention maps are descriptive, not causal. "This head looks like an induction
+  head" is a hypothesis. To promote it to a fact we have to <em>intervene</em> — delete
+  the head and check that value-copying breaks, and only value-copying. That is the
+  subject of the next lesson, and it is where interpretability gets its teeth.</p>
+</div>
+
+<p>Onward to causal methods — how to prove a component does what you think it does.</p>

@@ -1,0 +1,80 @@
+<p>A trained neural network is a big pile of numbers — weights — that somehow produce
+correct answers. <strong>Mechanistic interpretability</strong> is the project of
+turning that pile of numbers into an <em>explanation</em>: a description of the
+internal algorithm, in terms a human can follow, backed by evidence.</p>
+
+<div class="aside def">
+  <span class="lab">Definition</span>
+  <p><strong>Mechanistic interpretability</strong> — reverse-engineering the specific
+  computations a trained network performs, down to the role of individual components
+  (attention heads, neurons, directions in activation space), and testing those roles
+  with experiments rather than just telling a plausible story.</p>
+</div>
+
+<h2>Why bother?</h2>
+<p>Two reasons, one practical and one scientific.</p>
+<ul>
+  <li><strong>Trust and safety.</strong> If a model is going to make decisions that
+  matter, "it usually gets the right answer" is not enough. We want to know
+  <em>how</em> it decides, so we can predict when it will fail, catch deception, and
+  fix it at the mechanism instead of by trial and error.</li>
+  <li><strong>Science.</strong> Networks trained by gradient descent discover
+  solutions no human designed. Some are elegant, some are bizarre. Understanding them
+  is genuinely new knowledge about what computation looks like when it is
+  <em>found</em> rather than written.</li>
+</ul>
+
+<h2>What counts as an explanation</h2>
+<p>The trap in interpretability is the <em>just-so story</em>: you look at a picture,
+say "this head looks like it tracks subjects," and move on. That might be true. It
+might also be pattern-matching on noise. The discipline of this field is that a claim
+about a mechanism has to make a <em>testable prediction</em>, and you have to run the
+test.</p>
+
+<div class="aside why">
+  <span class="lab">The core move</span>
+  <p>Observation suggests a mechanism; intervention confirms it. If you think a head
+  "copies the value," then deleting that head should break value-copying and nothing
+  else — so delete it and measure. Throughout this course, every observation is
+  followed by an experiment that could have proven it wrong.</p>
+</div>
+
+<h2>The question we chose</h2>
+<p>Sorting is a beautiful test case because computer science already knows dozens of
+sorting <em>algorithms</em>, each with a distinctive structure. So we can ask a sharp
+question:</p>
+
+<div class="keypoint">If you train a transformer to sort, does it discover a
+recognizable sorting algorithm inside — and if so, which one, and can we prove it?</div>
+
+<p>That question turned out to have a surprising, multi-part answer, and chasing it
+down is the spine of this course. Here is the shape of the journey, so you know where
+we are going:</p>
+
+<ol>
+  <li><strong>Plain sorting is "cheating."</strong> Over a small set of symbols, the
+  easiest way to sort is to <em>count</em> how many of each symbol you have and emit
+  them in order — no comparisons, no moving things around. The model finds this, and
+  its internals look boring precisely because counting is so simple.</li>
+  <li><strong>Forcing real work.</strong> To make the model actually <em>route</em>
+  information, we change the task: sort <em>(key, value)</em> pairs by key, and carry
+  each value along with its key. Now a value has to physically travel from its input
+  slot to wherever its key ends up — counting can't fake that.</li>
+  <li><strong>An architecture wall.</strong> The standard encoder we started with
+  <em>cannot learn</em> the pair task at all. Understanding <em>why</em> teaches us
+  something deep about what different architectures can and cannot represent.</li>
+  <li><strong>The crack.</strong> A causal decoder learns it easily, and inside we
+  find a crisp, understandable circuit. The rest of the course is taking that circuit
+  apart.</li>
+</ol>
+
+<div class="aside caveat">
+  <span class="lab">Honesty note</span>
+  <p>Real research is not a clean march to the right answer. We made wrong turns and
+  overclaimed things that later analysis corrected. This course keeps those in —
+  including a whole lesson on what we got wrong — because knowing <em>how</em> a
+  conclusion can be wrong is part of learning to do this well.</p>
+</div>
+
+<p>To reverse-engineer the model we first have to understand how it is built. That is
+the next lesson: a transformer, from tokens up.</p>

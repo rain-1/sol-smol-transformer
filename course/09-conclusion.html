@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9 — What you learned — Tiny Transformer Interpretability</title>
+<link rel="stylesheet" href="course.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<button id="menu" aria-label="Toggle navigation">☰ Contents</button>
+<div class="shell">
+<nav class="side" id="side">
+  <a class="brand" href="index.html">Tiny Transformer<span>Interpretability, from scratch</span></a>
+  <ol class="toc"><li class="grp">Start</li><li class=""><a href="index.html">Overview</a></li><li class="grp">Foundations</li><li class=""><a href="01-what-is-interp.html">1 · What is interpretability?</a></li><li class=""><a href="02-transformer.html">2 · How a transformer works</a></li><li class=""><a href="03-the-model.html">3 · Our model and its task</a></li><li class="grp">Techniques</li><li class=""><a href="04-attention.html">4 · Reading attention</a></li><li class=""><a href="05-causal.html">5 · Causal methods</a></li><li class=""><a href="06-probing-geometry.html">6 · Probing & geometry</a></li><li class="grp">Synthesis</li><li class=""><a href="07-the-algorithm.html">7 · The algorithm it learned</a></li><li class=""><a href="08-universality-failures.html">8 · Universality, failures & honesty</a></li><li class="cur"><a href="09-conclusion.html">9 · What you learned</a></li></ol>
+  <p class="sidenote">A hands-on course built around one 51k-parameter model that
+  learned to sort.</p>
+</nav>
+<main id="main">
+<article>
+<header class="lh">
+  <p class="part">Synthesis</p>
+  <h1>What you learned</h1>
+  <p class="sub">The big lessons and where to go next</p>
+</header>
+<p>You started with a pile of 51,000 numbers and an opaque ability to sort. You end able
+to state the algorithm inside it, name every component's job, and cite an experiment for
+each claim. That is the whole game. Let us collect what you learned.</p>
+
+<h2>The toolkit you now have</h2>
+<div class="scroll"><table>
+<tr><th>Tool</th><th>Question it answers</th><th>Watch out for</th></tr>
+<tr><td>Attention heatmaps</td><td>Where does a head look?</td><td>Descriptive only — not whether it matters</td></tr>
+<tr><td>Ablation</td><td>Is this component necessary?</td><td>Necessary ≠ "does the thing you assume"</td></tr>
+<tr><td>Activation patching</td><td>What information does this state carry?</td><td>Off-distribution; localizes, does not explain</td></tr>
+<tr><td>Logit attribution</td><td>Which component writes the answer?</td><td>Relies on the linear read-out approximation</td></tr>
+<tr><td>Linear probes</td><td>What info is present, and where?</td><td>Decodable ≠ used by the model</td></tr>
+<tr><td>PCA / effective dim</td><td>How much of the space is used?</td><td>A projection can hide a real direction</td></tr>
+<tr><td>Embedding geometry</td><td>How is a concept laid out?</td><td>Interpolation vs extrapolation differ</td></tr>
+</table></div>
+
+<h2>Four ideas worth keeping</h2>
+
+<h3>1. Architecture decides which algorithms are reachable.</h3>
+<p>The same task was <em>unlearnable</em> for the encoder and <em>easy</em> for the causal
+decoder, because value-routing is naturally an induction copy — a circuit that forms
+readily when generation is left-to-right. When a model can't learn something, the
+representation it would need may simply not be reachable by its architecture.</p>
+
+<h3>2. Models take the easiest path; design the task to force the mechanism.</h3>
+<p>Plain sorting became counting, not comparison, because counting was easier. If you
+want to study a particular circuit, you have to build a task where nothing simpler will
+do. Half of interpretability is choosing the right model organism.</p>
+
+<h3>3. Geometry follows computation.</h3>
+<p>Keys got an ordered embedding because they are compared; values got an arbitrary one
+because they are only copied. The clean circles and helixes you see in famous results
+appear precisely when the task <em>forces</em> that structure. Shape is a shadow of
+function.</p>
+
+<h3>4. Observation proposes; intervention disposes.</h3>
+<p>Every real claim here survived an experiment that could have refuted it. And every
+mistake we made was the same shape: reading a coarse signal (<em>necessary</em>,
+<em>decodable</em>) as a precise one (<em>does X</em>, <em>is used</em>, <em>is
+localized</em>). Hold observations as hypotheses until a sharp test promotes them.</p>
+
+<div class="keypoint">A trained network is not magic and it is not a lookup table. It is
+a specific algorithm, discovered by gradient descent, that you can read out if you are
+willing to look and then test what you see.</div>
+
+<h2>Try it yourself</h2>
+<p>Everything in this course is reproducible. The model, the training, and every analysis
+live in <code>research/sort_scaling/</code>, and the write-ups with full numbers are in
+<code>reports/</code>. Concrete next steps, in rough order of difficulty:</p>
+<ul>
+  <li>Run <code>research/sort_scaling/walkthrough.py</code> and change the example input;
+  watch the induction head re-target.</li>
+  <li>Ablate a different head in <code>deep_interp.py</code> and predict the effect
+  before you look.</li>
+  <li>Train a fresh seed and find the induction head yourself — by role, not by index.</li>
+  <li>Design a new task that would force a <em>different</em> circuit (say, keys you must
+  add rather than compare) and see what geometry appears.</li>
+</ul>
+
+<h2>Where this fits</h2>
+<p>The techniques you practised — reading attention, ablation and patching, probing, and
+geometric analysis — are the same ones used on frontier models with billions of
+parameters. The difference is only that here you could hold the entire circuit in your
+head at once. That is the point of a model organism: learn the moves where you can check
+your work, then take them somewhere you cannot.</p>
+
+<div class="aside result">
+  <span class="lab">You made it</span>
+  <p>You can now open a small transformer, form a hypothesis about a mechanism, design an
+  intervention to test it, decode what its activations represent, and write down the
+  algorithm — with the humility to notice when a coarse result is masquerading as a
+  precise one. Go find a circuit.</p>
+</div>
+
+<p style="margin-top:28px"><a href="index.html">↩ Back to the overview</a></p>
+
+<nav class="pn"><a class="prev" href="08-universality-failures.html"><span>← Previous</span>8 · Universality, failures & honesty</a></nav>
+</article>
+<footer class="foot">Part of the <a href="index.html">Tiny Transformer Interpretability</a>
+course · reproducible from <code>research/sort_scaling/</code> ·
+built by generating <code>course/build.py</code>.</footer>
+</main>
+</div>
+<script>
+document.getElementById('menu').addEventListener('click',()=>document.getElementById('side').classList.toggle('open'));
+</script>
+</body>
+</html>

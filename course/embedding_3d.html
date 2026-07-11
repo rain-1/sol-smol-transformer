@@ -1,0 +1,222 @@
+<title>Embedding geometry: keys vs values</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --ink: #10151b; --muted: #5b6774;
+    --line: #e4e8ee; --accent: #2f6df0; --grid: #eef1f5;
+    --key-tint: #2f6df0; --val-tint: #e07b39;
+    --canvas-bg: #0f1720;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b0f14; --panel: #121820; --ink: #e9edf2; --muted: #8b98a6;
+      --line: #212a34; --accent: #6ea0ff; --grid: #1a2028;
+      --canvas-bg: #0a1017;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f7f9; --panel: #ffffff; --ink: #10151b; --muted: #5b6774;
+    --line: #e4e8ee; --accent: #2f6df0; --grid: #eef1f5; --canvas-bg: #0f1720;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b0f14; --panel: #121820; --ink: #e9edf2; --muted: #8b98a6;
+    --line: #212a34; --accent: #6ea0ff; --grid: #1a2028; --canvas-bg: #0a1017;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .wrap {
+    max-width: 1080px; margin: 0 auto; padding: 40px 24px 56px;
+    color: var(--ink); background: var(--bg);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace; }
+  .eyebrow {
+    font-family: ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 14px;
+  }
+  h1 {
+    font-size: clamp(26px, 4.2vw, 40px); line-height: 1.08; margin: 0 0 14px;
+    font-weight: 640; letter-spacing: -0.02em; text-wrap: balance; max-width: 20ch;
+  }
+  .lede { margin: 0; max-width: 66ch; color: var(--muted); font-size: 16px; line-height: 1.6; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    margin: 30px 0 18px; padding-bottom: 18px; border-bottom: 1px solid var(--line);
+  }
+  button {
+    font: inherit; font-size: 13px; color: var(--ink); background: var(--panel);
+    border: 1px solid var(--line); border-radius: 8px; padding: 8px 13px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px; transition: border-color .15s, background .15s;
+  }
+  button:hover { border-color: var(--accent); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, var(--panel)); }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
+  button[aria-pressed="true"] .dot { background: var(--accent); }
+  .hint { margin-left: auto; color: var(--muted); font-size: 12.5px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+  figure { margin: 0; }
+  .panel {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .phead { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .ptitle { font-size: 15px; font-weight: 620; letter-spacing: -0.01em; }
+  .ptitle span { color: var(--muted); font-weight: 500; }
+  .tag { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--muted); }
+  .cv { position: relative; width: 100%; aspect-ratio: 1 / 1; border-radius: 10px; overflow: hidden;
+        background: var(--canvas-bg); cursor: grab; }
+  .cv.drag { cursor: grabbing; }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+  .verdict {
+    font-family: ui-monospace, Menlo, monospace; font-size: 12px; line-height: 1.5;
+    color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px;
+  }
+  .verdict b { color: var(--ink); font-weight: 600; }
+  .legend { display: flex; align-items: center; gap: 9px; }
+  .legend .bar { height: 9px; flex: 1; border-radius: 5px;
+    background: linear-gradient(90deg,#440154,#414487,#2a788e,#22a884,#7ad151,#fde725); }
+  .legend .lab { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--muted);
+    font-variant-numeric: tabular-nums; }
+  footer { margin-top: 30px; color: var(--muted); font-size: 13px; line-height: 1.6; max-width: 72ch; }
+  footer code { font-family: ui-monospace, Menlo, monospace; font-size: 12px;
+    background: var(--grid); padding: 1px 5px; border-radius: 4px; }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Sort decoder · token embeddings</p>
+  <h1>Keys are ordered. Values are an arbitrary code.</h1>
+  <p class="lede">
+    The tiny sort transformer must <b>compare</b> keys but only <b>copy</b> values (by
+    identity). So it learns to lay its 50 key embeddings out <b>by numeric value</b> —
+    while the 20 value embeddings stay an unordered cluster. Each dot is one token's
+    48-dim embedding, projected to its top 3 principal components and coloured by id.
+    Turn on the <b>id path</b> (0→1→2→…): for keys it threads a coherent route; for
+    values it tangles. Drag to rotate.
+  </p>
+
+  <div class="controls">
+    <button id="path" aria-pressed="true"><span class="dot"></span>id path</button>
+    <button id="spin" aria-pressed="true"><span class="dot"></span>auto-rotate</button>
+    <button id="reset">reset view</button>
+    <span class="hint">drag to rotate · scroll to zoom</span>
+  </div>
+
+  <div class="grid">
+    <figure class="panel">
+      <div class="phead">
+        <div class="ptitle">Keys <span>· ids 0–49 · compared</span></div>
+        <div class="tag">top-3 PCs = 20% var</div>
+      </div>
+      <div class="cv" id="cv-keys"><canvas></canvas></div>
+      <div class="legend"><span class="lab">0</span><div class="bar"></div><span class="lab">49</span></div>
+      <div class="verdict">interpolation id-decode r = <b>0.79</b> · a real order code</div>
+    </figure>
+    <figure class="panel">
+      <div class="phead">
+        <div class="ptitle">Values <span>· ids 0–19 · payload</span></div>
+        <div class="tag">top-3 PCs = 41% var</div>
+      </div>
+      <div class="cv" id="cv-values"><canvas></canvas></div>
+      <div class="legend"><span class="lab">0</span><div class="bar"></div><span class="lab">19</span></div>
+      <div class="verdict">interpolation id-decode r = <b>0.09</b> · no order</div>
+    </figure>
+  </div>
+
+  <footer>
+    Embeddings from the length-30 causal pair-sort decoder
+    (<code>causal_pairs_L30.pt</code>, d&#95;model = 48). Coordinates are the top-3
+    principal components of each alphabet's embedding table; keys spread across more
+    directions (only ~20% of key variance lives in 3 PCs, vs ~41% for values), so the
+    key cloud is genuinely higher-dimensional. See <code>reports/sort-embeddings.md</code>.
+  </footer>
+</div>
+
+<script>
+const DATA = {"keys": {"coords": [[0.13089999556541443, -0.31369999051094055, 0.13089999556541443], [-0.40560001134872437, 0.8486999869346619, 0.01590000092983246], [-0.007400000002235174, 0.6316999793052673, 0.6560999751091003], [-0.21160000562667847, -0.08789999783039093, 0.5120999813079834], [-0.2669000029563904, -0.12780000269412994, 1.0], [0.13369999825954437, 0.34860000014305115, 0.10100000351667404], [0.3181999921798706, 0.027000000700354576, 0.8285999894142151], [0.3961000144481659, -0.26820001006126404, 0.45159998536109924], [0.7502999901771545, -0.23350000381469727, -0.08810000121593475], [0.6665999889373779, -0.33739998936653137, 0.2370000034570694], [0.36399999260902405, 0.29330000281333923, -0.07169999927282333], [0.6240000128746033, -0.14509999752044678, 0.13199999928474426], [0.16619999706745148, -0.38370001316070557, -0.31610000133514404], [0.044599998742341995, 0.45239999890327454, 0.4943000078201294], [0.42149999737739563, -0.1137000024318695, -0.2705000042915344], [-0.5817999839782715, 0.014000000432133675, 0.1784999966621399], [0.12189999967813492, 0.38679999113082886, -0.0803999975323677], [0.21389999985694885, 0.564300000667572, 0.1354999989271164], [0.5056999921798706, 0.18559999763965607, -0.23880000412464142], [0.7649999856948853, -0.07750000059604645, 0.2741999924182892], [0.31869998574256897, 0.10369999706745148, -0.09989999979734421], [0.38580000400543213, 0.18369999527931213, 0.17980000376701355], [-0.19920000433921814, -0.0697999969124794, -0.27489998936653137], [-0.18330000340938568, -0.2298000007867813, -0.6764000058174133], [0.26649999618530273, -0.1906999945640564, -0.6909999847412109], [-0.29899999499320984, 0.5728999972343445, -0.2329999953508377], [0.2515999972820282, 0.1915999948978424, -0.07880000025033951], [0.35740000009536743, -0.18379999697208405, 0.003800000064074993], [0.07270000129938126, 0.0697999969124794, -0.3695000112056732], [0.5515000224113464, -0.1177000030875206, 0.015300000086426735], [-0.26249998807907104, -0.06889999657869339, 0.20569999516010284], [0.006800000090152025, -0.2973000109195709, -0.019899999722838402], [-0.022600000724196434, 0.6021999716758728, -0.08399999886751175], [-0.15440000593662262, 0.4519999921321869, -0.22599999606609344], [-0.1379999965429306, 0.7260000109672546, -0.48980000615119934], [-0.09719999879598618, 0.29420000314712524, -0.5157999992370605], [0.06459999829530716, 0.18039999902248383, -0.39590001106262207], [-0.5209000110626221, -0.23019999265670776, -0.3546999990940094], [-0.8192999958992004, 0.3165000081062317, 0.44760000705718994], [-0.5403000116348267, -0.10480000078678131, 0.28600001335144043], [-0.4844000041484833, -0.28540000319480896, 0.13779999315738678], [-0.9815999865531921, -0.3734999895095825, 0.20640000700950623], [-0.3693000078201294, 0.18569999933242798, -0.4043999910354614], [-0.32409998774528503, -0.5304999947547913, 0.028300000354647636], [-0.5205000042915344, -0.03869999945163727, -0.1517000049352646], [-0.3131999969482422, -0.6951000094413757, 0.08229999989271164], [-0.05490000173449516, -0.8339999914169312, 0.2962000072002411], [-0.32089999318122864, -0.7494000196456909, -0.52920001745224], [0.24660000205039978, -0.29409998655319214, -0.000699999975040555], [-0.06589999794960022, -0.2492000013589859, -0.3758000135421753]], "var3": 0.19554173946380615}, "values": {"coords": [[-0.3359000086784363, 0.09200000017881393, 0.015399999916553497], [-0.23489999771118164, -0.3952000141143799, -0.6123999953269958], [-0.4056999981403351, -0.2662000060081482, 0.4684000015258789], [0.6733999848365784, -0.4456999897956848, 0.22930000722408295], [0.9487000107765198, 0.027799999341368675, 0.7450000047683716], [-0.4422000050544739, -0.5059999823570251, 0.22529999911785126], [-0.6164000034332275, -0.14309999346733093, -0.6717000007629395], [-0.4494999945163727, 1.0, 0.22709999978542328], [0.8356000185012817, 0.4059000015258789, -0.09650000184774399], [-0.15379999577999115, -0.5577999949455261, 0.42649999260902405], [-0.1281999945640564, -0.6740000247955322, -0.13680000603199005], [-0.5753999948501587, 0.6274999976158142, 0.37790000438690186], [0.179299995303154, 0.24400000274181366, 0.325300008058548], [-0.15960000455379486, -0.21690000593662262, 0.08349999785423279], [0.2556000053882599, -0.15559999644756317, 0.043800000101327896], [-0.16339999437332153, -0.5325999855995178, 0.10639999806880951], [0.29829999804496765, 0.6743000149726868, -0.18809999525547028], [0.6789000034332275, -0.023399999365210533, -0.8500999808311462], [0.1988999992609024, 0.2013999968767166, -0.6168000102043152], [-0.4036000072956085, 0.6437000036239624, -0.10159999877214432]], "var3": 0.4062690734863281}};
+
+const VIRIDIS = [[68,1,84],[72,40,120],[62,74,137],[49,104,142],[38,130,142],
+  [31,158,137],[53,183,121],[110,206,88],[181,222,43],[253,231,37]];
+function viridis(t){
+  t = Math.max(0, Math.min(1, t));
+  const x = t*(VIRIDIS.length-1), i = Math.floor(x), f = x-i;
+  const a = VIRIDIS[i], b = VIRIDIS[Math.min(i+1, VIRIDIS.length-1)];
+  return `rgb(${Math.round(a[0]+(b[0]-a[0])*f)},${Math.round(a[1]+(b[1]-a[1])*f)},${Math.round(a[2]+(b[2]-a[2])*f)})`;
+}
+
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const state = { showPath: true, spin: !reduceMotion };
+
+class Scatter {
+  constructor(box, coords){
+    this.box = box; this.canvas = box.querySelector('canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.pts = coords; this.n = coords.length;
+    this.ry = 0.6; this.rx = -0.35; this.zoom = 1;
+    this.dragging = false; this.px = 0; this.py = 0;
+    this.resize();
+    addEventListener('resize', () => this.resize());
+    box.addEventListener('pointerdown', e => { this.dragging = true; box.classList.add('drag');
+      this.px = e.clientX; this.py = e.clientY; box.setPointerCapture(e.pointerId); });
+    box.addEventListener('pointermove', e => {
+      if(!this.dragging) return;
+      this.ry += (e.clientX-this.px)*0.01; this.rx += (e.clientY-this.py)*0.01;
+      this.rx = Math.max(-1.5, Math.min(1.5, this.rx));
+      this.px = e.clientX; this.py = e.clientY; });
+    const end = () => { this.dragging = false; box.classList.remove('drag'); };
+    box.addEventListener('pointerup', end); box.addEventListener('pointercancel', end);
+    box.addEventListener('wheel', e => { e.preventDefault();
+      this.zoom = Math.max(0.5, Math.min(2.4, this.zoom * (e.deltaY<0?1.08:0.93))); }, {passive:false});
+  }
+  resize(){
+    const dpr = Math.min(devicePixelRatio||1, 2), r = this.box.getBoundingClientRect();
+    this.canvas.width = r.width*dpr; this.canvas.height = r.height*dpr;
+    this.ctx.setTransform(dpr,0,0,dpr,0,0); this.w = r.width; this.h = r.height;
+  }
+  project(p){
+    const cy=Math.cos(this.ry), sy=Math.sin(this.ry), cx=Math.cos(this.rx), sx=Math.sin(this.rx);
+    let x=p[0]*cy - p[2]*sy, z=p[0]*sy + p[2]*cy, y=p[1];
+    let y2=y*cx - z*sx, z2=y*sx + z*cx;
+    const s = Math.min(this.w,this.h)*0.34*this.zoom;
+    return { sx: this.w/2 + x*s, sy: this.h/2 - y2*s, d: z2 };
+  }
+  frame(){
+    if(state.spin && !this.dragging) this.ry += 0.0032;
+    const ctx=this.ctx; ctx.clearRect(0,0,this.w,this.h);
+    const proj = this.pts.map((p,i)=>({...this.project(p), i}));
+    if(state.showPath){
+      for(let i=0;i<this.n-1;i++){
+        const a=proj[i], b=proj[i+1], dd=(a.d+b.d)/2;
+        ctx.strokeStyle = `rgba(150,160,175,${0.16 + 0.30*(dd+1)/2})`;
+        ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.sx,a.sy); ctx.lineTo(b.sx,b.sy); ctx.stroke();
+      }
+    }
+    proj.sort((a,b)=>a.d-b.d);
+    for(const q of proj){
+      const depth=(q.d+1)/2, rad=2.7 + 3.4*depth;
+      ctx.globalAlpha = 0.45 + 0.55*depth;
+      ctx.fillStyle = viridis(q.i/(this.n-1));
+      ctx.beginPath(); ctx.arc(q.sx,q.sy,rad,0,7); ctx.fill();
+      ctx.globalAlpha = 0.5+0.5*depth; ctx.lineWidth=0.8;
+      ctx.strokeStyle='rgba(255,255,255,0.5)'; ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+  }
+}
+
+const scatters = [
+  new Scatter(document.getElementById('cv-keys'), DATA.keys.coords),
+  new Scatter(document.getElementById('cv-values'), DATA.values.coords),
+];
+function loop(){ for(const s of scatters) s.frame(); requestAnimationFrame(loop); }
+loop();
+
+const bPath=document.getElementById('path'), bSpin=document.getElementById('spin');
+bPath.addEventListener('click', ()=>{ state.showPath=!state.showPath; bPath.setAttribute('aria-pressed', state.showPath); });
+bSpin.addEventListener('click', ()=>{ state.spin=!state.spin; bSpin.setAttribute('aria-pressed', state.spin); });
+bSpin.setAttribute('aria-pressed', state.spin);
+document.getElementById('reset').addEventListener('click', ()=>{
+  for(const s of scatters){ s.ry=0.6; s.rx=-0.35; s.zoom=1; }});
+</script>

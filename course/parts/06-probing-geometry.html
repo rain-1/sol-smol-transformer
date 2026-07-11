@@ -1,0 +1,99 @@
+<p>Ablation and patching tell us where computation happens. But what do the activations
+actually <em>represent</em>? To answer that we look at the <em>shape</em> of the
+activations — what can be read out of them, how many dimensions they use, and how they
+are arranged in space.</p>
+
+<h2>Linear probes: what information is present</h2>
+<p>A <strong>linear probe</strong> is a simple classifier (or regressor) trained to
+predict some property — a token's identity, its position, the value about to be
+emitted — from an activation vector. If a simple linear readout succeeds, that
+information is present and easy to access at that point in the network.</p>
+
+<div class="aside def">
+  <span class="lab">Definition &amp; caution</span>
+  <p><strong>Linear probe</strong> — fit a linear map from activations to a label; its
+  accuracy measures how <em>linearly decodable</em> the label is. Crucial caveat: a
+  probe tells you the information is <em>accessible</em>, not that the model
+  <em>uses</em> it. Decodability is not the same as use — remember this; it will bite us.</p>
+</div>
+
+<p>Probing our model across depth revealed a striking negative result. The
+<em>global rank</em> of a key (is it the 3rd-smallest? the 8th?) is <strong>never</strong>
+linearly decodable — about chance at every layer. Yet the model sorts perfectly. The
+conclusion: it does <strong>not</strong> compute a global ordering. It sorts
+<em>by generation</em> — at each step it just picks the next key, using the local
+"threshold" we met in Lesson 5, never materializing ranks at all.</p>
+
+<h2>Effective dimensionality: how much of the space is used</h2>
+<p>The residual stream here is 48-dimensional. But is all of it used? A measure called
+the <strong>participation ratio</strong> estimates the <em>effective</em> number of
+dimensions the activations actually spread across.</p>
+
+<figure>
+  <img src="figures/stream_dimensionality.png" alt="Effective dimensionality falls from ~24 at the embedding to ~9 mid-network.">
+  <figcaption>Effective dimensionality by stage. The embedding uses ~24 of 48 dims
+  (position spreads it out), then the network <b>compresses to a ~9-dimensional working
+  representation</b> by block 1. The real computation lives in about 9 of the 48
+  directions.</figcaption>
+</figure>
+
+<h2>Embedding geometry: keys are ordered, values are not</h2>
+<p>Here is the most satisfying geometry result, and it follows directly from what the
+model has to <em>do</em>. The decoder must <em>compare</em> keys (is this key bigger?)
+but only <em>copy</em> values (by identity). So we should expect the key embeddings to
+be arranged by numeric value, and the value embeddings not to bother. Exactly so:</p>
+
+<figure>
+  <img src="figures/emb_key_value_order.png" alt="Keys carry numeric order; values are an arbitrary code.">
+  <figcaption>Left/middle: pairwise similarity of key and value embeddings. Right: how
+  well a linear map recovers a token's numeric id. <b>Keys</b> carry real order
+  (interpolation r&nbsp;=&nbsp;0.79); <b>values</b> carry essentially none (0.09). Keys
+  are laid out by value because they are compared; values are an arbitrary code because
+  they are only ever routed by identity.</figcaption>
+</figure>
+
+<div class="aside why">
+  <span class="lab">The through-line</span>
+  <p>Geometry follows computation. A quantity the model must do arithmetic-like
+  operations on (compare) gets an organized representation; a quantity it only shuffles
+  gets a shapeless one. This is also why famous "clean" manifolds — circles for modular
+  arithmetic, helixes for numbers — appear only when the task <em>forces</em> them.</p>
+</div>
+
+<div class="aside caveat">
+  <span class="lab">A subtlety we had to reconcile</span>
+  <p>That key order supports <em>interpolation</em> (r&nbsp;=&nbsp;0.79 for held-out
+  ids mixed among trained ones) but not clean <em>extrapolation</em> to unseen id ranges
+  (r&nbsp;=&nbsp;0.30). So "ordered" means "linearly decodable and thresholdable," not
+  "a clean geometric line." Two different measurements gave 0.79 and 0.30, and the
+  honest picture is both — a distributed order code, not a tidy axis.</p>
+</div>
+
+<h2>The contextual stream has clean structure</h2>
+<p>The raw <em>embedding table</em> looks nearly shapeless in 3D — its order is a weak,
+distributed direction. But the <em>contextual</em> residual states are highly
+structured: they cluster by token role, and the clusters sharpen with depth.</p>
+
+<p>These two interactive views make the contrast concrete — drag to rotate:</p>
+
+<iframe class="embed" src="stream_3d.html" title="Interactive 3D residual stream" loading="lazy"></iframe>
+<p style="font-size:14px;color:var(--muted);margin-top:-8px">The residual stream,
+colored by token role, with a stage toggle: watch input/output key/value/SEP roles pull
+apart from embedding to final.</p>
+
+<iframe class="embed" src="embedding_3d.html" title="Interactive 3D embeddings" loading="lazy"></iframe>
+<p style="font-size:14px;color:var(--muted);margin-top:-8px">The raw key vs value
+embedding tables. Toggle the id-path: it threads coherently through the keys but tangles
+through the values — ordered vs arbitrary, made visible.</p>
+
+<div class="aside result">
+  <span class="lab">What geometry told us</span>
+  <p>The model never builds global ranks (it sorts by generation); it does its real work
+  in ~9 effective dimensions; keys are embedded with order because they are compared and
+  values without because they are copied; and the contextual stream separates cleanly by
+  role. Every one of these is a statement about representation, testable with a probe or
+  a projection.</p>
+</div>
+
+<p>We now have observations (attention), interventions (ablation, patching), and
+representations (probing, geometry). Time to assemble them into a single algorithm.</p>

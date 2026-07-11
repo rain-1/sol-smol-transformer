@@ -1,0 +1,92 @@
+<p>We have gathered attention patterns, causal effects, and representations. This lesson
+assembles them into one thing: the <strong>algorithm</strong> the model learned, with a
+line of evidence behind every step. This is what all the tools were for.</p>
+
+<h2>The circuit, laid out</h2>
+<p>The four heads and two MLPs split into two channels — one that chooses keys, one that
+carries values — off a shared layer-0 setup. Here is where each head sends its attention
+at each kind of step:</p>
+
+<figure>
+  <img src="figures/deep_circuit_roles.png" alt="Where each head attends when emitting a key vs a value.">
+  <figcaption>Attention role map. At a <b>value</b> step the layer-0 heads read the input
+  keys (setup) and <b>L1H0</b> reads the matching input value (the induction copy). At a
+  <b>key</b> step <b>L1H1</b> reads the already-generated output (to find the threshold)
+  while the idle heads park on <code>SEP</code>, which acts as a scratchpad.</figcaption>
+</figure>
+
+<h2>The algorithm, as pseudocode</h2>
+<p>Reading the evidence together, the model runs this:</p>
+
+<pre><code><span class="tok-c"># ── Layer 0: gather &amp; bind (setup) ──</span>
+for each input value position:
+    stamp it with its own key's identity      <span class="tok-c"># L0 precursor heads</span>
+at SEP:
+    gather the set of present keys here        <span class="tok-c"># a "menu", read from SEP later</span>
+
+<span class="tok-c"># ── Generate the sorted pairs, left to right ──</span>
+threshold = -inf
+for q in range(n):
+    <span class="tok-k"># KEY step</span>
+    threshold = max key emitted so far         <span class="tok-c"># L1H1 reads the output</span>
+    emit  smallest present key &gt; threshold      <span class="tok-c"># threshold-gated readout</span>
+    <span class="tok-k"># VALUE step</span>
+    emit  value whose key == the key just emitted   <span class="tok-c"># L1H0 induction copy</span></code></pre>
+
+<div class="scroll"><table>
+<tr><th>Step</th><th>Mechanism</th><th>Evidence</th></tr>
+<tr><td>bind value↔key</td><td>L0 precursor heads</td><td>diagonal attention; weight-level composition into L1H0</td></tr>
+<tr><td>gather key menu</td><td>L0 reads keys at <code>SEP</code></td><td>SEP-blocking ablation crashes key accuracy 1.00→0.24</td></tr>
+<tr><td>threshold = running max</td><td>L1H1 reads emitted keys</td><td>causal patch: next key tracks the max, not the last (99.6%)</td></tr>
+<tr><td>pick smallest key &gt; θ</td><td>threshold-gated linear readout</td><td>the swept-threshold staircase (Lesson 5)</td></tr>
+<tr><td>copy the value</td><td>L1H0 induction head</td><td>100% attention on the matching value; ablation kills values</td></tr>
+</table></div>
+
+<h2>How does it actually compare? A cliff.</h2>
+<p>"Pick the smallest present key greater than the threshold" sounds like it needs a
+comparison loop. It does not. The readout is a single, roughly <em>linear</em> function
+of the residual, shaped like a cliff. Measuring the logit the model assigns to each
+present key as a function of (key − threshold):</p>
+
+<div class="scroll"><table>
+<tr><th class="n">key − θ</th><th class="n">−10</th><th class="n">−1</th><th class="n">0</th><th class="n">+1</th><th class="n">+2</th><th class="n">+5</th><th class="n">+20</th></tr>
+<tr><td>mean logit</td><td class="n">−2.0</td><td class="n">4.3</td><td class="n">4.6</td><td class="n"><strong>30.3</strong></td><td class="n">27.4</td><td class="n">18.9</td><td class="n">−2.0</td></tr>
+</table></div>
+
+<div class="keypoint">There is an ~8-logit <em>cliff</em> the moment a key exceeds the
+threshold, then a gentle decline. The argmax is automatically the smallest key just
+above θ. "Greater than" is not a loop — it is a fixed readout with a cliff, and argmax
+does the choosing.</div>
+
+<p>So the comparison never scans candidates or computes ranks. Layer 0 builds a menu of
+present keys; L1H1 supplies a moving threshold; and a cliff-shaped linear readout emits
+whatever key sits just above it. As the threshold sweeps upward step by step, the output
+marches through the keys in order — that is the sort.</p>
+
+<div class="aside caveat">
+  <span class="lab">Where the story gets honestly fuzzy</span>
+  <p>Two pieces stayed distributed rather than crisp. The "menu" is not a tidy object you
+  can transplant out of <code>SEP</code> — the candidate identities are spread across the
+  layer-0 residual. And the threshold is a ~5–8-dimensional code, not a single direction.
+  The <em>mechanism</em> is pinned down; a minimal set of named directions for it is not.
+  We flag this rather than pretend otherwise.</p>
+</div>
+
+<h2>And the MLPs?</h2>
+<p>A tidy surprise from ablation: the layer-1 MLP barely matters (removing it costs a few
+percent) — the selection and the copy are both done in <em>attention</em>. The layer-0
+MLP <em>is</em> essential for keys (removing it crashes key accuracy to 0.20), yet
+probes show it does not build the readable key menu — so what exactly it contributes
+stays unlocalized. Not every question resolves cleanly, and saying so is part of the
+craft.</p>
+
+<div class="aside result">
+  <span class="lab">The model, understood</span>
+  <p>Two channels: <b>sort-by-generation</b> for keys (running-max threshold + a
+  cliff readout) and an <b>induction head</b> for values, both computed in layer-1
+  attention off a layer-0 setup, with <code>SEP</code> as a scratchpad. Not a comparison
+  network — a generate-and-threshold machine.</p>
+</div>
+
+<p>One model, fully explained. But is any of this <em>general</em> — or did we just
+narrate one lucky network? That question, and where the model breaks, is next.</p>

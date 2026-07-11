@@ -1,0 +1,75 @@
+<p>You started with a pile of 51,000 numbers and an opaque ability to sort. You end able
+to state the algorithm inside it, name every component's job, and cite an experiment for
+each claim. That is the whole game. Let us collect what you learned.</p>
+
+<h2>The toolkit you now have</h2>
+<div class="scroll"><table>
+<tr><th>Tool</th><th>Question it answers</th><th>Watch out for</th></tr>
+<tr><td>Attention heatmaps</td><td>Where does a head look?</td><td>Descriptive only — not whether it matters</td></tr>
+<tr><td>Ablation</td><td>Is this component necessary?</td><td>Necessary ≠ "does the thing you assume"</td></tr>
+<tr><td>Activation patching</td><td>What information does this state carry?</td><td>Off-distribution; localizes, does not explain</td></tr>
+<tr><td>Logit attribution</td><td>Which component writes the answer?</td><td>Relies on the linear read-out approximation</td></tr>
+<tr><td>Linear probes</td><td>What info is present, and where?</td><td>Decodable ≠ used by the model</td></tr>
+<tr><td>PCA / effective dim</td><td>How much of the space is used?</td><td>A projection can hide a real direction</td></tr>
+<tr><td>Embedding geometry</td><td>How is a concept laid out?</td><td>Interpolation vs extrapolation differ</td></tr>
+</table></div>
+
+<h2>Four ideas worth keeping</h2>
+
+<h3>1. Architecture decides which algorithms are reachable.</h3>
+<p>The same task was <em>unlearnable</em> for the encoder and <em>easy</em> for the causal
+decoder, because value-routing is naturally an induction copy — a circuit that forms
+readily when generation is left-to-right. When a model can't learn something, the
+representation it would need may simply not be reachable by its architecture.</p>
+
+<h3>2. Models take the easiest path; design the task to force the mechanism.</h3>
+<p>Plain sorting became counting, not comparison, because counting was easier. If you
+want to study a particular circuit, you have to build a task where nothing simpler will
+do. Half of interpretability is choosing the right model organism.</p>
+
+<h3>3. Geometry follows computation.</h3>
+<p>Keys got an ordered embedding because they are compared; values got an arbitrary one
+because they are only copied. The clean circles and helixes you see in famous results
+appear precisely when the task <em>forces</em> that structure. Shape is a shadow of
+function.</p>
+
+<h3>4. Observation proposes; intervention disposes.</h3>
+<p>Every real claim here survived an experiment that could have refuted it. And every
+mistake we made was the same shape: reading a coarse signal (<em>necessary</em>,
+<em>decodable</em>) as a precise one (<em>does X</em>, <em>is used</em>, <em>is
+localized</em>). Hold observations as hypotheses until a sharp test promotes them.</p>
+
+<div class="keypoint">A trained network is not magic and it is not a lookup table. It is
+a specific algorithm, discovered by gradient descent, that you can read out if you are
+willing to look and then test what you see.</div>
+
+<h2>Try it yourself</h2>
+<p>Everything in this course is reproducible. The model, the training, and every analysis
+live in <code>research/sort_scaling/</code>, and the write-ups with full numbers are in
+<code>reports/</code>. Concrete next steps, in rough order of difficulty:</p>
+<ul>
+  <li>Run <code>research/sort_scaling/walkthrough.py</code> and change the example input;
+  watch the induction head re-target.</li>
+  <li>Ablate a different head in <code>deep_interp.py</code> and predict the effect
+  before you look.</li>
+  <li>Train a fresh seed and find the induction head yourself — by role, not by index.</li>
+  <li>Design a new task that would force a <em>different</em> circuit (say, keys you must
+  add rather than compare) and see what geometry appears.</li>
+</ul>
+
+<h2>Where this fits</h2>
+<p>The techniques you practised — reading attention, ablation and patching, probing, and
+geometric analysis — are the same ones used on frontier models with billions of
+parameters. The difference is only that here you could hold the entire circuit in your
+head at once. That is the point of a model organism: learn the moves where you can check
+your work, then take them somewhere you cannot.</p>
+
+<div class="aside result">
+  <span class="lab">You made it</span>
+  <p>You can now open a small transformer, form a hypothesis about a mechanism, design an
+  intervention to test it, decode what its activations represent, and write down the
+  algorithm — with the humility to notice when a coarse result is masquerading as a
+  precise one. Go find a circuit.</p>
+</div>
+
+<p style="margin-top:28px"><a href="index.html">↩ Back to the overview</a></p>

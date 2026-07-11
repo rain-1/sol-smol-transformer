@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3 — Our model and its task — Tiny Transformer Interpretability</title>
+<link rel="stylesheet" href="course.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<button id="menu" aria-label="Toggle navigation">☰ Contents</button>
+<div class="shell">
+<nav class="side" id="side">
+  <a class="brand" href="index.html">Tiny Transformer<span>Interpretability, from scratch</span></a>
+  <ol class="toc"><li class="grp">Start</li><li class=""><a href="index.html">Overview</a></li><li class="grp">Foundations</li><li class=""><a href="01-what-is-interp.html">1 · What is interpretability?</a></li><li class=""><a href="02-transformer.html">2 · How a transformer works</a></li><li class="cur"><a href="03-the-model.html">3 · Our model and its task</a></li><li class="grp">Techniques</li><li class=""><a href="04-attention.html">4 · Reading attention</a></li><li class=""><a href="05-causal.html">5 · Causal methods</a></li><li class=""><a href="06-probing-geometry.html">6 · Probing & geometry</a></li><li class="grp">Synthesis</li><li class=""><a href="07-the-algorithm.html">7 · The algorithm it learned</a></li><li class=""><a href="08-universality-failures.html">8 · Universality, failures & honesty</a></li><li class=""><a href="09-conclusion.html">9 · What you learned</a></li></ol>
+  <p class="sidenote">A hands-on course built around one 51k-parameter model that
+  learned to sort.</p>
+</nav>
+<main id="main">
+<article>
+<header class="lh">
+  <p class="part">Foundations</p>
+  <h1>Our model and its task</h1>
+  <p class="sub">Sorting key–value pairs, the exact architecture, and why a decoder</p>
+</header>
+<p>Now we meet the model we will spend the rest of the course dissecting — and, just as
+importantly, the two false starts that led to it. The false starts are not filler:
+they are where the most general lessons live.</p>
+
+<h2>Attempt 1: plain sorting is counting</h2>
+<p>We first trained an ordinary transformer to sort a string of symbols from a
+20-symbol alphabet into ascending order. It works. But when we looked inside, the
+attention was diffuse and uninformative — no crisp circuit. A simple experiment told
+us why. We varied the number of layers and measured accuracy:</p>
+
+<div class="scroll"><table>
+<tr><th>Layers</th><th class="n">Exact-sort accuracy</th></tr>
+<tr><td>1</td><td class="n">0.73</td></tr>
+<tr><td><strong>2</strong></td><td class="n"><strong>0.93</strong></td></tr>
+<tr><td>3</td><td class="n">0.76</td></tr>
+<tr><td>4</td><td class="n">0.79</td></tr>
+</table></div>
+
+<p>Accuracy <em>peaks at two layers and falls with more</em>. A comparison-based
+sorting network would only get better with depth. This signature — a two-stage
+optimum — is what you expect from <strong>counting sort</strong>: build a histogram of
+how many of each symbol you have, then read them out in order. Over a small alphabet,
+counting is easier than comparing, so gradient descent finds it, and there is nothing
+to "route" — hence the boring internals.</p>
+
+<div class="aside why">
+  <span class="lab">The lesson hiding here</span>
+  <p>A model solves the task the <em>easiest</em> way its data and architecture allow,
+  not the way a textbook would. If we want to study routing circuits, we have to design
+  a task where counting cannot win.</p>
+</div>
+
+<h2>Attempt 2: sort key–value pairs (and an architecture wall)</h2>
+<p>So we changed the task. Each item is now a <strong>(key, value) pair</strong>. The
+model must output the pairs sorted <em>by key</em>, carrying each value along with its
+key. A histogram of keys tells you the sorted keys but says nothing about which value
+belongs to which key — so the model is forced to physically <em>move</em> each value
+from its input position to wherever its key lands. That is genuine routing.</p>
+
+<p>We fed this to the same encoder architecture — and it <strong>could not learn it</strong>.
+Not with more layers, more width, more training, or easier variants. It reliably sorted
+the keys (by counting) and left the values at chance. We will unpack the deep reason in
+Lesson 5, but the one-line version is a preview of a theme:</p>
+
+<div class="keypoint">Some tasks are unlearnable for one architecture and trivial for
+another. The architecture decides which algorithms are even reachable.</div>
+
+<h2>The model: a causal decoder</h2>
+<p>The fix was to change the <em>architecture</em>, not the task. We reframed sorting
+as <strong>autoregressive generation</strong>: the model reads the input pairs, then
+<em>generates</em> the sorted pairs one token at a time, left to right, with a causal
+mask. This trains easily and is the model we dissect. Concretely:</p>
+
+<div class="aside def">
+  <span class="lab">The exact setup</span>
+  <p>Input keys are distinct token ids <code>0–49</code>; values are a disjoint set
+  <code>50–69</code>; then a separator <code>SEP</code>, and the model generates the
+  sorted pairs, ending with <code>EOS</code>. The sequence is laid out interleaved:</p>
+  <pre><code>k0 v0 k1 v1 … k&#8345;&#8331;&#8321; v&#8345;&#8331;&#8321;  <span class="tok-k">SEP</span>  sk0 sv0 sk1 sv1 …  <span class="tok-k">EOS</span>
+└──────── input pairs ────────┘      └── sorted output ──┘</code></pre>
+  <p>Architecture: <strong>2 layers, 2 heads per layer, <code>d_model</code>&nbsp;=&nbsp;48,
+  MLP width 96</strong> — about <strong>51,000 parameters</strong>. It reaches
+  <strong>99.9%</strong> exact-match generation at up to 30 pairs.</p>
+</div>
+
+<h2>What "solving it" means, and how we test</h2>
+<p>Two evaluation modes recur throughout. <strong>Teacher forcing</strong> feeds the
+model the correct sequence and asks, at each position, whether its next-token
+prediction is right — handy for probing internal states at known positions.
+<strong>Autoregressive generation</strong> lets the model actually produce the output
+from scratch — the honest test of whether it "sorts."</p>
+
+<div class="aside caveat">
+  <span class="lab">A quirk to remember</span>
+  <p>The model never learned to emit <code>EOS</code>: that token was accidentally left
+  out of the training loss, so it gets no signal to produce it and just keeps trying to
+  sort. Our accuracy numbers therefore score the sorted <em>pairs</em>, not the
+  end marker. We only discovered this while doing the failure-mode analysis in
+  Lesson&nbsp;8 — a small reminder that even "it works" hides details.</p>
+</div>
+
+<p>We now have a model that does real routing and is small enough to understand
+completely. Time to look inside. The most visual technique comes first: reading its
+attention.</p>
+
+<nav class="pn"><a class="prev" href="02-transformer.html"><span>← Previous</span>2 · How a transformer works</a><a class="next" href="04-attention.html"><span>Next →</span>4 · Reading attention</a></nav>
+</article>
+<footer class="foot">Part of the <a href="index.html">Tiny Transformer Interpretability</a>
+course · reproducible from <code>research/sort_scaling/</code> ·
+built by generating <code>course/build.py</code>.</footer>
+</main>
+</div>
+<script>
+document.getElementById('menu').addEventListener('click',()=>document.getElementById('side').classList.toggle('open'));
+</script>
+</body>
+</html>

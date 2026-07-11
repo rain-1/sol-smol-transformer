@@ -1,0 +1,68 @@
+<div class="hero">
+  <p class="q">Can we take a neural network apart and explain, mechanism by mechanism,
+  exactly how it does what it does?</p>
+  <p>This course answers that question for one very small transformer — about
+  <strong>51,000 parameters</strong>, small enough to understand completely — that
+  learned to <strong>sort</strong>. By the end you will be able to read its attention
+  patterns, run causal experiments on its internals, decode what its activations
+  represent, and write down the <em>algorithm</em> it discovered, with evidence for
+  every step.</p>
+</div>
+
+<p>You do not need to have studied transformers before. We build the model up from
+tokens and vectors, then learn each interpretability technique on a real example where
+you can see it pay off. Everything here is reproducible from the code in
+<code>research/sort_scaling/</code>.</p>
+
+<div class="aside why">
+  <span class="lab">Why this model</span>
+  <p>Big language models are too large to understand in full. A tiny model trained on a
+  single, well-defined task is a <em>model organism</em>: simple enough to explain
+  completely, yet it still learns real, surprising circuits. What we practise here —
+  attention analysis, ablation, patching, probing — is exactly what researchers use on
+  the big models.</p>
+</div>
+
+<h2>The story in one paragraph</h2>
+<p>We wanted to know whether a transformer, scaled up to sort long sequences, would
+discover a <em>sorting network</em> (the comparison circuits from computer science).
+It did not. Over a small alphabet it found <em>counting sort</em> instead. So we
+changed the task to force real routing — sort <em>(key, value)</em> pairs and carry
+each value along — and discovered that the usual encoder <em>could not learn it at
+all</em>. Switching to a causal decoder cracked it, and inside we found a clean
+<strong>induction head</strong> copying values and a <strong>threshold-cliff readout</strong>
+choosing keys. Then we checked whether any of it generalizes, where it breaks, and
+what we got wrong along the way.</p>
+
+<div class="keypoint">The punchline you will earn: a model's architecture decides
+<em>which algorithm is even reachable</em>, and the geometry it learns follows the
+computation it has to perform.</div>
+
+<h2>How the course is organized</h2>
+<div class="cards">
+  <a href="01-what-is-interp.html"><span class="k">FOUNDATIONS</span>
+    <h3>Why & what</h3><p>What interpretability is, and the question we set out to answer.</p></a>
+  <a href="02-transformer.html"><span class="k">FOUNDATIONS</span>
+    <h3>The transformer</h3><p>Tokens, the residual stream, attention, and MLPs, from scratch.</p></a>
+  <a href="03-the-model.html"><span class="k">FOUNDATIONS</span>
+    <h3>Our model</h3><p>The sort task, the exact architecture, and why a decoder.</p></a>
+  <a href="04-attention.html"><span class="k">TECHNIQUES</span>
+    <h3>Reading attention</h3><p>Heatmaps, heads, and spotting an induction head.</p></a>
+  <a href="05-causal.html"><span class="k">TECHNIQUES</span>
+    <h3>Causal methods</h3><p>Ablation, activation patching, and logit attribution.</p></a>
+  <a href="06-probing-geometry.html"><span class="k">TECHNIQUES</span>
+    <h3>Probing & geometry</h3><p>What activations encode, and their shape.</p></a>
+  <a href="07-the-algorithm.html"><span class="k">SYNTHESIS</span>
+    <h3>The algorithm</h3><p>The full circuit, and how it compares keys.</p></a>
+  <a href="08-universality-failures.html"><span class="k">SYNTHESIS</span>
+    <h3>Universality & failures</h3><p>Other seeds, breakage, and honest caveats.</p></a>
+</div>
+
+<div class="aside def">
+  <span class="lab">Prerequisites</span>
+  <p>Comfort with vectors and matrices, and a little Python. No prior deep-learning
+  knowledge assumed — we define every term the first time it appears.</p>
+</div>
+
+<p>Ready? Start with <a href="01-what-is-interp.html">Lesson 1 — What is
+interpretability?</a></p>

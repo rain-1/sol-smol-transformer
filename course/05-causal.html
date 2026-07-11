@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5 — Causal methods — Tiny Transformer Interpretability</title>
+<link rel="stylesheet" href="course.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<button id="menu" aria-label="Toggle navigation">☰ Contents</button>
+<div class="shell">
+<nav class="side" id="side">
+  <a class="brand" href="index.html">Tiny Transformer<span>Interpretability, from scratch</span></a>
+  <ol class="toc"><li class="grp">Start</li><li class=""><a href="index.html">Overview</a></li><li class="grp">Foundations</li><li class=""><a href="01-what-is-interp.html">1 · What is interpretability?</a></li><li class=""><a href="02-transformer.html">2 · How a transformer works</a></li><li class=""><a href="03-the-model.html">3 · Our model and its task</a></li><li class="grp">Techniques</li><li class=""><a href="04-attention.html">4 · Reading attention</a></li><li class="cur"><a href="05-causal.html">5 · Causal methods</a></li><li class=""><a href="06-probing-geometry.html">6 · Probing & geometry</a></li><li class="grp">Synthesis</li><li class=""><a href="07-the-algorithm.html">7 · The algorithm it learned</a></li><li class=""><a href="08-universality-failures.html">8 · Universality, failures & honesty</a></li><li class=""><a href="09-conclusion.html">9 · What you learned</a></li></ol>
+  <p class="sidenote">A hands-on course built around one 51k-parameter model that
+  learned to sort.</p>
+</nav>
+<main id="main">
+<article>
+<header class="lh">
+  <p class="part">Techniques</p>
+  <h1>Causal methods</h1>
+  <p class="sub">Ablation, activation patching, and logit attribution</p>
+</header>
+<p>Observation generates hypotheses; <strong>intervention</strong> tests them. In this
+lesson we stop looking and start breaking things — deleting components, swapping
+activations, and tracing where the answer is written. This is the heart of mechanistic
+interpretability.</p>
+
+<h2>Ablation: delete it and see what breaks</h2>
+<p>The simplest causal experiment is <strong>ablation</strong>: remove a component's
+contribution to the residual stream (set its output to zero), leave everything else
+untouched, and measure how much accuracy drops. A big drop means the component was
+doing something necessary; no drop means it was not.</p>
+
+<div class="aside def">
+  <span class="lab">Definition</span>
+  <p><strong>Ablation</strong> — zero out one component (a head's output, an MLP's
+  output, a single neuron) and re-measure the model. It answers "is this part
+  <em>necessary</em>?" Caveat: zeroing pushes the model slightly off-distribution, so
+  ablation measures necessity-under-ablation, not the exact everyday contribution.</p>
+</div>
+
+<h2>Per-position ablation reveals who does what</h2>
+<p>A plain accuracy drop is blunt. We can sharpen it by scoring the key-emitting and
+value-emitting positions <em>separately</em>. Now ablation tells us not just "does this
+head matter" but "does it matter for the <em>keys</em> or the <em>values</em>?"</p>
+
+<figure>
+  <img src="figures/deep_head_roles.png" alt="Per-head ablation, split into key-output and value-output accuracy drop.">
+  <figcaption>Ablating each head, scored on key vs value positions. <b>L1H0</b> wrecks
+  values (drop 0.95) but not keys — the value head. <b>L1H1</b> wrecks keys (0.93) but
+  not values — the sort head. The layer-0 heads matter for both. This confirms, causally,
+  the roles we guessed from the heatmaps.</figcaption>
+</figure>
+
+<p>This is the pattern to internalize: the heatmap <em>suggested</em> L1H0 copies
+values; the ablation <em>proves</em> that removing it destroys value output specifically.
+Observation plus intervention.</p>
+
+<h2>Tracing a dependency: the precursor</h2>
+<p>Ablation also finds <em>connections</em>. An induction head cannot work alone — it
+needs an earlier "precursor" head to set up the information it matches on. We can find
+that partner by ablating each other head and asking which one, when removed, kills the
+induction head's behaviour.</p>
+
+<figure>
+  <img src="figures/deep_precursor.png" alt="Ablating L0H0 collapses the induction score; other heads do nothing.">
+  <figcaption>How much each head's removal degrades the induction head's targeting.
+  Deleting <b>L0H0</b> collapses it (from 0.99 to ~0.10); the others do essentially
+  nothing. So the value circuit is a two-head team: L0H0 sets up the key identity, L1H0
+  copies the value. This is a <b>circuit</b>, not a lone head.</figcaption>
+</figure>
+
+<h2>Activation patching: transplanting a thought</h2>
+<p>Ablation asks "is it necessary?" <strong>Activation patching</strong> asks the
+sharper question "what <em>information</em> does this activation carry?" You run the
+model on input A, save an internal activation, then run it on input B but
+<em>overwrite</em> that activation with the saved one from A — and see whether B's
+behaviour changes toward A's. If it does, that activation carried the thing that
+differed.</p>
+
+<div class="aside why">
+  <span class="lab">Why patching is powerful</span>
+  <p>It isolates <em>which</em> piece of internal state is responsible for a decision,
+  at <em>which</em> position and layer. It is how we cracked the hardest part of this
+  model — how it decides which key to emit next. We call that decision a comparison
+  against a running "threshold" (the largest key emitted so far).</p>
+</div>
+
+<p>The decisive experiment: hold the input fixed (so the set of available keys — the
+"menu" — cannot change), and patch in a <em>different threshold</em> at one output
+step. If the model is really doing "smallest available key greater than the
+threshold," then sweeping the injected threshold should march the output through the
+present keys in order — a staircase.</p>
+
+<figure>
+  <img src="figures/riddle_threshold_sweep.png" alt="Sweeping an injected threshold makes one fixed menu emit a staircase of keys.">
+  <figcaption>One fixed input; the injected threshold θ swept along the x-axis. The key
+  the model emits (dots) tracks the ideal "smallest present key &gt; θ" (grey staircase)
+  <b>exactly</b> — match 1.000. The same menu emits every key in order purely as a
+  function of the threshold. That is proof of the mechanism, not a story about it.</figcaption>
+</figure>
+
+<h2>Direct logit attribution: who writes the answer</h2>
+<p>One more causal-flavoured tool. Because every component <em>adds</em> into the
+residual stream, and the final read-out is (approximately) linear, we can split the
+final prediction into a sum of contributions — one per component — and ask which
+component actually pushed up the correct answer's logit. This is <strong>direct logit
+attribution</strong>.</p>
+
+<figure>
+  <img src="figures/stream_logit_attribution.png" alt="Direct logit attribution: L1 attention dominates the correct-token logit.">
+  <figcaption>Each component's contribution to the correct next-token logit, at key and
+  value steps. <b>Layer-1 attention writes the answer</b> in both cases; the layer-1 MLP
+  is a distant second and layer 0 barely contributes directly. The selection and the
+  copy both happen in attention.</figcaption>
+</figure>
+
+<div class="aside result">
+  <span class="lab">What causal methods bought us</span>
+  <p>We upgraded three guesses to facts: L1H0 is <em>causally</em> the value head, L1H1
+  the key head, and L0H0 the single precursor the value head depends on; the next-key
+  rule really is "smallest present key above a threshold" (the staircase); and layer-1
+  attention is what writes the output. Every one of these could have come out
+  otherwise — that is what makes them evidence.</p>
+</div>
+
+<p>Ablation and patching tell us <em>where</em> computation happens and <em>what</em>
+it depends on. To learn what the activations actually <em>represent</em>, we need one
+more family of tools: probing and geometry.</p>
+
+<nav class="pn"><a class="prev" href="04-attention.html"><span>← Previous</span>4 · Reading attention</a><a class="next" href="06-probing-geometry.html"><span>Next →</span>6 · Probing & geometry</a></nav>
+</article>
+<footer class="foot">Part of the <a href="index.html">Tiny Transformer Interpretability</a>
+course · reproducible from <code>research/sort_scaling/</code> ·
+built by generating <code>course/build.py</code>.</footer>
+</main>
+</div>
+<script>
+document.getElementById('menu').addEventListener('click',()=>document.getElementById('side').classList.toggle('open'));
+</script>
+</body>
+</html>
