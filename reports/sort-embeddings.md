@@ -46,6 +46,17 @@ Linearly decoding the numeric id from the raw embedding vectors:
   (left) has more structure. Values only ever need to be distinct enough to be copied
   by their key, so the model never bothered to order them.
 
+### See it in 3D
+
+An interactive viewer rotates the top-3-PC projection of each alphabet, coloured by
+id, with an optional **id-ordered path** (0→1→2→…): for keys the path threads a
+coherent route through the cloud, for values it tangles. Build it with
+`python research/sort_scaling/build_emb3d.py` (writes a standalone
+`research/sort_scaling/embedding_3d.html`); it was also published as an interactive
+Artifact. Note only ~20% of key variance lives in 3 PCs (vs ~41% for values), so the
+key cloud is genuinely higher-dimensional — the 3D view is a lossy but suggestive
+slice.
+
 ## Positional embeddings: an alternating slot code with a boundary at `SEP`
 
 ![The positional embedding alternates sharply (key vs value slots) and changes regime at SEP.](figures/agent_geom_positional.png)
